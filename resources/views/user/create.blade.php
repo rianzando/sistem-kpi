@@ -31,18 +31,25 @@
                         <div class="card-header">
                             <h4 class="card-title">Add New User</h4>
                             <a href="{{ route('users.index') }}" class="btn btn-sm btn-default float-right">Back</a>
-                        </div>
-                        <div class="card-body">
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                            @if (session()->has('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }} <i class="fas fa-check-circle"></i><button type="button"
+                                        class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             @endif
-                            {{ $errors }}
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="card-body">
+
                             <form action="{{ route('users.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
@@ -113,8 +120,8 @@
                                         </div>
                                         <div class="form-group form-floating-label">
                                             <label for="position">Select Position</label>
-                                            <select class="form-control input-border-bottom" name="position" id="position"
-                                                required>
+                                            <select class="form-control input-border-bottom" name="position"
+                                                id="position" required>
                                                 <option value="Direktur">Direktur</option>
                                                 <option value="Manager">Manager</option>
                                                 <option value="Assitent Manager">Asst Manager</option>
@@ -124,8 +131,8 @@
                                         </div>
                                         <div class="form-group form-floating-label">
                                             <label for="level">Select Level</label>
-                                            <select class="form-control input-border-bottom" name="level" id="level"
-                                                required>
+                                            <select class="form-control input-border-bottom" name="level"
+                                                id="level" required>
                                                 <option value="Spesialist">Spesialist</option>
                                                 <option value="Senior">Senior</option>
                                                 <option value="Junior">Junior</option>
@@ -151,22 +158,22 @@
                                         <div class="form-group form-floating-label">
                                             <label for="first_work_date">First Work Date</label>
                                             <input id="first_work_date" type="date"
-                                                class="form-control input-border-bottom" name="first_work_date" required>
+                                                class="form-control input-border-bottom" name="first_work_date">
                                         </div>
                                         <div class="form-group form-floating-label">
                                             <label for="end_work_date">End Work Date</label>
                                             <input id="end_work_date" type="date"
-                                                class="form-control input-border-bottom" name="end_work_date" required>
+                                                class="form-control input-border-bottom" name="end_work_date">
                                         </div>
                                         <div class="form-group form-floating-label">
                                             <label for="place_of_birth">Place of Birth</label>
                                             <input id="place_of_birth" type="text"
-                                                class="form-control input-border-bottom" name="place_of_birth" required>
+                                                class="form-control input-border-bottom" name="place_of_birth">
                                         </div>
                                         <div class="form-group form-floating-label">
                                             <label for="date_of_birth">Date of Birth</label>
                                             <input id="date_of_birth" type="date"
-                                                class="form-control input-border-bottom" name="date_of_birth" required>
+                                                class="form-control input-border-bottom" name="date_of_birth">
                                         </div>
                                         <div class="form-check">
                                             <label>Gender</label><br />

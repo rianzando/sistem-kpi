@@ -27,6 +27,22 @@
                     <div class="card">
                         <div class="card-header bg-light">
                             <h4 class="card-title">List User Sistem KPI</h4>
+                            @if (session()->has('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }} <i class="fas fa-check-circle"></i><button type="button"
+                                        class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }} <i class="fas fa-times-circle"></i><button type="button"
+                                        class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -54,12 +70,14 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->detail->departement->directorate->name }}</td>
-                                                <td>{{ $user->detail->departement->name }}</td>
-                                                <td>{{ $user->detail->position }}</td>
-                                                <td>{{ $user->detail->level }}</td>
-                                                <td>{{ $user->detail->gender }}</td>
-                                                <td>{{ $user->detail->spk_status }}</td>
+                                                <td>{{ $user->userdetail->departement->name ?? 'Departement Tidak Tersedia' }}
+                                                </td>
+                                                <td>{{ $user->userdetail->departement->name ?? 'Departement Tidak Tersedia' }}
+                                                </td>
+                                                <td>{{ $user->userdetail->position }}</td>
+                                                <td>{{ $user->userdetail->level }}</td>
+                                                <td>{{ $user->userdetail->gender }}</td>
+                                                <td>{{ $user->userdetail->spk_status }}</td>
                                                 <td>
                                                     <a href="" class="btn btn-sm btn-warning"><i
                                                             class="fa fa-edit"></i></a>
@@ -78,6 +96,7 @@
                                         </tfoot>
                                     @endforelse
                                 </table>
+                                {{ $users->links() }}
                             </div>
                         </div>
                     </div>
