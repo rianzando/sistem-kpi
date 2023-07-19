@@ -192,7 +192,7 @@
     <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 
     <!-- Atlantis JS -->
-    {{-- <script src="../assets/js/atlantis.min.js"></script> --}}
+    <script src="../assets/js/atlantis.min.js"></script>
 
     <!-- Atlantis DEMO methods, don't include it in your project! -->
     <script src="../assets/js/setting-demo.js"></script>
