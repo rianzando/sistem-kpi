@@ -25,10 +25,14 @@
                                 <i class="icon-user"></i>
                                 <span class="ml-2">Profile </span>
                             </a>
-                            <a href="./page-login.html" class="dropdown-item">
-                                <i class="icon-key"></i>
-                                <span class="ml-2">Logout </span>
-                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <a href="#" class="dropdown-item"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="icon-key"></i>
+                                    <span class="ml-2">Logout</span>
+                                </a>
+                            </form>
                         </div>
                     </li>
                 </ul>
