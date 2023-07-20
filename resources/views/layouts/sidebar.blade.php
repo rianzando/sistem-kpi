@@ -1,189 +1,31 @@
-<div class="sidebar-wrapper scrollbar scrollbar-inner">
-    <div class="sidebar-content">
-        <div class="user">
-            <div class="avatar-sm float-left mr-2">
-                <img src="../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
-            </div>
-            <div class="info">
-                <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-                    <span>
-                        Reinalia
-                        <span class="user-level">Manager HRGA</span>
-                        <span class="caret"></span>
-                    </span>
-                </a>
-                <div class="clearfix"></div>
-
-                <div class="collapse in" id="collapseExample">
-                    <ul class="nav">
-                        <li>
-                            <a href="#profile">
-                                <span class="link-collapse">My Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#edit">
-                                <span class="link-collapse">Edit Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#settings">
-                                <span class="link-collapse">Settings</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <ul class="nav nav-primary">
-            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
-                    <i class="fas fa-home"></i>
-                    <p>Dashboard</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="dashboard">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="{{ route('dashboard') }}">
-                                <span class="sub-item">Dashboard Fix</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+<div class="quixnav">
+    <div class="quixnav-scroll">
+        <ul class="metismenu" id="menu">
+            <li class="nav-label first">Main Menu</li>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="icon icon-single-04"></i><span
+                        class="nav-text">Dashboard</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                </ul>
             </li>
-            <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                    <i class="fa fa-ellipsis-h"></i>
-                </span>
-                <h4 class="text-section">Components</h4>
+            <li class="nav-label">Kpi Setting</li>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                        class="icon icon-app-store"></i><span class="nav-text">KPI</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="./app-profile.html">KPI Corporate</a></li>
+                    <li><a href="./app-calender.html">KPI Directorate</a></li>
+                    <li><a href="./app-calender.html">KPI Departement</a></li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a data-toggle="collapse" href="#base">
-                    <i class="fas fa-user"></i>
-                    <p>User Setting</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="base">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="{{ route('users.index') }}">
-                                <span class="sub-item">User List</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="collapse" href="#sidebarLayouts">
-                    <i class="fas fa-th-list"></i>
-                    <p>Sidebar Layouts</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="sidebarLayouts">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="sidebar-style-1.html">
-                                <span class="sub-item">Sidebar Style 1</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="overlay-sidebar.html">
-                                <span class="sub-item">Overlay Sidebar</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="compact-sidebar.html">
-                                <span class="sub-item">Compact Sidebar</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="static-sidebar.html">
-                                <span class="sub-item">Static Sidebar</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="icon-menu.html">
-                                <span class="sub-item">Icon Menu</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="collapse" href="#forms">
-                    <i class="fas fa-pen-square"></i>
-                    <p>Forms</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="forms">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="forms/forms.html">
-                                <span class="sub-item">Basic Form</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="collapse" href="#tables">
-                    <i class="fas fa-table"></i>
-                    <p>Tables</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="tables">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="tables/tables.html">
-                                <span class="sub-item">Basic Table</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="tables/datatables.html">
-                                <span class="sub-item">Datatables</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="collapse" href="#maps">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p>Maps</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="maps">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="maps/jqvmap.html">
-                                <span class="sub-item">JQVMap</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a data-toggle="collapse" href="#charts">
-                    <i class="far fa-chart-bar"></i>
-                    <p>Charts</p>
-                    <span class="caret"></span>
-                </a>
-                <div class="collapse" id="charts">
-                    <ul class="nav nav-collapse">
-                        <li>
-                            <a href="charts/charts.html">
-                                <span class="sub-item">Chart Js</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="charts/sparkline.html">
-                                <span class="sub-item">Sparkline</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <li class="nav-label">User</li>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                        class="icon icon-app-store"></i><span class="nav-text">SETTING USER</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('users.index') }}">User List</a></li>
+                </ul>
             </li>
         </ul>
     </div>
+
+
 </div>

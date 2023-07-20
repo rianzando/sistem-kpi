@@ -27,7 +27,7 @@ class UserDetailSeeder extends Seeder
             'first_work_date' => date(now()),
             'end_work_date' =>  date(now()),
             'place_of_birth' => 'Bogor',
-            'date_of_birth' => Carbon::create('1994', '02', '25'),
+            'date_of_birth' =>  date(now()),
             'gender' => 'Laki-laki',
             'education' => 'Bachelor',
             'name_of_place' => 'University',

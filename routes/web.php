@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('dashboard.index');
+    return view('layouts.main');
 });
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -34,10 +34,6 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store');
 // Show form to edit a user
 Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 
-
-// Show form to edit a user
-Route::get('/users/{id}/change', [UserController::class, 'change'])->name('users.change');
-
 // Update a user
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
@@ -50,4 +46,5 @@ Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 // Show list of all users
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
+Route::put('/users/{id}/status', [UserController::class, 'updateStatus'])->name('users.updateStatus');
 // end route
