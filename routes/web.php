@@ -20,4 +20,34 @@ Route::get('/', function () {
 });
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::resource('/users', UserController::class);
+// Route::resource('/users', UserController::class);
+
+
+// user route
+
+// Show form to create a new user
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+
+// Store a new user
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+// Show form to edit a user
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+
+
+// Show form to edit a user
+Route::get('/users/{id}/change', [UserController::class, 'change'])->name('users.change');
+
+// Update a user
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+// Delete a user
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+// Show details of a user
+Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+
+// Show list of all users
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+// end route

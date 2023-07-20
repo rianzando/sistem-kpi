@@ -9,6 +9,7 @@ use App\Models\UserDetail;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -97,10 +98,10 @@ class UserController extends Controller
             //     dd($e->getMessage()); // Tampilkan pesan kesalahan umum
             //     return redirect()->route('users.create')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
             // }
-        } catch (QueryException $e) {
+        }  catch (\Throwable $th) {
             // Tangkap exception jika ada masalah dengan query database
-            return redirect()->route('users.create')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
-        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => 'Gagal menyimpan data User. ' . $th->getMessage()]);
+        }  catch (\Throwable $th) {
             // Tangkap exception umum jika ada kesalahan lainnya
             return redirect()->route('users.create')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
         }
@@ -112,32 +113,142 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            return view('user.show', compact('user'));
+        } catch (\Throwable $th) {
+            return redirect()->route('users.index')->with('error', 'User not found.');
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+    try {
+        // Find the user by ID along with its user_detail
+        $user = User::with('userDetail')->findOrFail($id);
+
+        // Fetch all roles and departements for dropdowns
+        $roles = Role::all();
+        $departements = Departement::all();
+
+        // Return the view with user data and dropdown options
+        return view('user.edit', compact('user', 'roles', 'departements'));
+    } catch (\Throwable $th) {
+        // Handle database query exception
+        return redirect()->route('users.index')->with('error', 'Failed to fetch user data. ' . $th->getMessage());
+    } catch (\Exception $e) {
+        // Handle other general exceptions
+        return redirect()->route('users.index')->with('error', 'An error occurred. Please try again or contact the administrator.');
+    }
     }
 
+    function change()
+    {
+        return view('user.change');
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            // Validasi input dari form
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'role_id' => 'required|exists:roles,id',
+                'departement_id' => 'required|exists:departements,id',
+                'image' => 'nullable|image|mimes:png,jpg,jpeg|max:10048',
+                // Add more validation rules for other fields in the form
+            ]);
+
+            // Cari pengguna berdasarkan $id
+            $user = User::findOrFail($id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->role_id = $request->role_id;
+
+            if ($request->filled('password')) {
+                // Update password if provided
+                $user->password = bcrypt($request->password);
+            }
+
+            $user->save();
+
+            // Cari user_detail berdasarkan $id pengguna
+            $userDetail = UserDetail::where('user_id', $id)->firstOrFail();
+            $userDetail->nik = $request->nik;
+            $userDetail->domisili = $request->domisili;
+            $userDetail->departement_id = $request->departement_id;
+            $userDetail->address = $request->address;
+            $userDetail->position = $request->position;
+            $userDetail->location = $request->location;
+            $userDetail->level = $request->level;
+            $userDetail->spk_status = $request->spk_status;
+            $userDetail->first_work_date = $request->first_work_date;
+            $userDetail->end_work_date = $request->end_work_date;
+            $userDetail->place_of_birth = $request->place_of_birth;
+            $userDetail->date_of_birth = $request->date_of_birth;
+            $userDetail->gender = $request->optionsRadios;
+            $userDetail->education = $request->education;
+            $userDetail->name_of_place = $request->name_of_place;
+            $userDetail->major = $request->major;
+
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($userDetail->image) {
+                    Storage::delete('public/' . $userDetail->image);
+                }
+
+                // Update image if new image is uploaded
+                $imagePath = $request->file('image')->store('images', 'public');
+                $userDetail->image = $imagePath;
+            }
+
+            $userDetail->save();
+
+            // Redirect to the user profile page with success message
+            return redirect()->route('profile', $id)->with('success', 'User data has been updated successfully!');
+        } catch (\Throwable $th) {
+            // Handle database query exception
+            return redirect()->back()->withInput()->withErrors(['error' => 'Failed to update user data. ' . $th->getMessage()]);
+        } catch (\Exception $e) {
+            // Handle other general exceptions
+            return redirect()->route('users.index')->with('error', 'An error occurred. Please try again or contact the administrator.');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        try {
+            // Cari pengguna berdasarkan $id
+            $user = User::findOrFail($id);
+
+            // Hapus data user_detail terlebih dahulu
+            $userDetail = UserDetail::where('user_id', $id)->firstOrFail();
+            if ($userDetail->image) {
+                // Hapus gambar jika ada
+                Storage::delete('public/' . $userDetail->image);
+            }
+            $userDetail->delete();
+
+            // Hapus data pengguna
+            $user->delete();
+
+            // Redirect ke halaman index pengguna dengan pesan sukses
+            return redirect()->route('users.index')->with('success', 'Pengguna berhasil dihapus!');
+        } catch (\Throwable $th) {
+            // Tangkap exception jika ada masalah dalam menghapus data
+            return redirect()->route('users.index')->with('error', 'Gagal menghapus pengguna. ' . $th->getMessage());
+        }
     }
 }

@@ -79,19 +79,26 @@
                                                 <td>{{ $user->userdetail->gender }}</td>
                                                 <td>{{ $user->userdetail->spk_status }}</td>
                                                 <td>
-                                                    <a href="" class="btn btn-sm btn-warning"><i
-                                                            class="fa fa-edit"></i></a>
-                                                    <a href="" class="btn btn-sm btn-primary"><i
-                                                            class="fa fa-eye"></i></a>
-                                                    <a href="" class="btn btn-sm btn-danger"><i
-                                                            class="fa fa-trash"></i></a>
+                                                    <a href="{{ route('users.edit', $user->id) }}"
+                                                        class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                                    <a href="{{ route('users.show', $user->id) }}"
+                                                        class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>
+                                                    <form class="d-inline" method="post"
+                                                        action="{{ route('users.destroy', $user->id) }}"
+                                                        data-user="{{ $user->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-sm btn-danger delete-btn">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     @empty
                                         <tfoot>
                                             <tr>
-                                                <td>Data User Masih Kosong</td>
+                                                <td colspan="10" class="text-center">Data User Masih Kosong</td>
                                             </tr>
                                         </tfoot>
                                     @endforelse
@@ -105,4 +112,30 @@
             </div>
         </div>
     </div>
+    <!-- Add the following script at the bottom of the view -->
+    <script>
+        // Add a click event listener to the delete buttons
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const userId = this.parentElement.dataset
+                    .user; // Get the user ID from the parent form element
+
+                // Show SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                }).then((result) => {
+                    // If user clicks "Yes", submit the form for deletion
+                    if (result.isConfirmed) {
+                        document.querySelector(`form[data-user="${userId}"]`).submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

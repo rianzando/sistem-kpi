@@ -118,6 +118,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        {{-- position --}}
                                         <div class="form-group form-floating-label">
                                             <label for="position">Select Position</label>
                                             <select class="form-control input-border-bottom" name="position"
@@ -129,6 +130,7 @@
                                                 <option value="Staff">Staff</option>
                                             </select>
                                         </div>
+                                        {{-- level  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="level">Select Level</label>
                                             <select class="form-control input-border-bottom" name="level"
@@ -138,6 +140,7 @@
                                                 <option value="Junior">Junior</option>
                                             </select>
                                         </div>
+                                        {{-- location  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="location">Select Location</label>
                                             <select class="form-control input-border-bottom" name="location"
@@ -146,6 +149,7 @@
                                                 <option value="Ketapang">Ketapang</option>
                                             </select>
                                         </div>
+                                        {{-- status spk  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="spk_status">Status SPK</label>
                                             <select class="form-control input-border-bottom" name="spk_status"
@@ -155,26 +159,31 @@
                                                 <option value="PHL">Pekerja Harian Lepas</option>
                                             </select>
                                         </div>
+                                        {{-- first work date  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="first_work_date">First Work Date</label>
                                             <input id="first_work_date" type="date"
                                                 class="form-control input-border-bottom" name="first_work_date">
                                         </div>
+                                        {{-- end work date  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="end_work_date">End Work Date</label>
                                             <input id="end_work_date" type="date"
                                                 class="form-control input-border-bottom" name="end_work_date">
                                         </div>
+                                        {{-- place of birth  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="place_of_birth">Place of Birth</label>
                                             <input id="place_of_birth" type="text"
                                                 class="form-control input-border-bottom" name="place_of_birth">
                                         </div>
+                                        {{-- date of birth  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="date_of_birth">Date of Birth</label>
                                             <input id="date_of_birth" type="date"
                                                 class="form-control input-border-bottom" name="date_of_birth">
                                         </div>
+                                        {{-- gender  --}}
                                         <div class="form-check">
                                             <label>Gender</label><br />
                                             <label class="form-radio-label">
@@ -188,21 +197,25 @@
                                                 <span class="form-radio-sign">Perempuan</span>
                                             </label>
                                         </div>
+                                        {{-- education  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="education">Education</label>
                                             <input id="education" type="text" class="form-control input-border-bottom"
                                                 name="education" required>
                                         </div>
+                                        {{-- place  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="name_of_place">Name of Place Education</label>
                                             <input id="name_of_place" type="text"
                                                 class="form-control input-border-bottom" name="name_of_place" required>
                                         </div>
+                                        {{-- major  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="major">Major</label>
                                             <input id="major" type="text" class="form-control input-border-bottom"
                                                 name="major" required>
                                         </div>
+                                        {{-- image  --}}
                                         <div class="form-group">
                                             <label for="image">Image</label>
                                             <input type="file" class="form-control-file" id="image"
