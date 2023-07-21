@@ -114,7 +114,7 @@
                                             {{-- nik  --}}
                                             <div class="form-group form-floating-label">
                                                 <label for="nik">Input Nik</label>
-                                                <input id="nik" type="text"
+                                                <input id="nik" type="number"
                                                     class="form-control input-border-bottom" name="nik" required>
                                             </div>
                                             {{-- dimisili  --}}
@@ -130,6 +130,12 @@
                                             <div class="form-group">
                                                 <label for="address">Address</label>
                                                 <textarea class="form-control" id="address" rows="5" name="address"></textarea>
+                                            </div>
+                                            {{-- phone  --}}
+                                            <div class="form-group">
+                                                <label for="phone">Phone</label>
+                                                <input id="phone" type="number"
+                                                    class="form-control input-border-bottom" name="phone" required>
                                             </div>
                                             {{-- departement  --}}
                                             <div class="form-group form-floating-label">

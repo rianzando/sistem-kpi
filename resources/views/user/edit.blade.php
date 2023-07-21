@@ -109,6 +109,11 @@
                                             <label for="address">Address</label>
                                             <textarea class="form-control" id="address" rows="5" name="address">{{ old('address', $user->userdetail->address) }}</textarea>
                                         </div>
+                                        {{-- phone  --}}
+                                        <div class="form-group">
+                                            <label for="phone">Phone</label>
+                                            <textarea class="form-control" id="phone" rows="5" name="phone">{{ old('phone', $user->userdetail->phone) }}</textarea>
+                                        </div>
                                         {{-- departement  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="departement_id">Select Departement</label>
@@ -124,8 +129,8 @@
                                         {{-- position  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="position">Select Position</label>
-                                            <select class="form-control input-border-bottom" name="position" id="position"
-                                                required>
+                                            <select class="form-control input-border-bottom" name="position"
+                                                id="position" required>
                                                 <option value="Direktur"
                                                     {{ old('position', $user->userdetail->position) == 'Direktur' ? 'selected' : '' }}>
                                                     Direktur</option>

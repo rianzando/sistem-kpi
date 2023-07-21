@@ -36,7 +36,8 @@
                 <form class="login100-form validate-form" action="{{ route('login') }}" method="POST">
                     @csrf
                     <span class="login100-form-title">
-                        Login Sistem KPI
+                        Login Sistem <br>
+                        Key Performance Indicator
                     </span>
 
                     <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
@@ -55,8 +56,9 @@
                         </span>
                     </div>
                     <div class="wrap-input100 validate-input">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Remember Me</label>
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember"
+                            style="margin-left: 10px">
+                        <label class="form-check-label" for="remember" style="margin-left: 10px">Remember Me</label>
                     </div>
                     <div class="container-login100-form-btn">
                         <button class="login100-form-btn" type="submit">
@@ -75,8 +77,13 @@
 
                     <div class="text-center p-t-136">
                         <a class="txt2" href="#">
-                            IT-Database
+                            <strong>IT-Database</strong>
                         </a>
+                        @if (session('status'))
+                            <div class="alert alert-danger">
+                                {{ session('message') }}
+                            </div>
+                        @endif
                     </div>
                 </form>
             </div>

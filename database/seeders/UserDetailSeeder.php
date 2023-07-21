@@ -17,6 +17,7 @@ class UserDetailSeeder extends Seeder
         $detailuser = [
             'user_id' => '1',
             'nik' => '1234567890',
+            'phone' => '089767571238',
             'domisili' => 'Non-lokal',
             'address' => 'Jl. Pagentongan',
             'departement_id' => 1,

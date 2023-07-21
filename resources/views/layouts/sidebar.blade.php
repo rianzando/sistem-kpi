@@ -18,8 +18,8 @@
                 </ul>
             </li>
             <li class="nav-label">User</li>
-            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                        class="icon icon-app-store"></i><span class="nav-text">SETTING USER</span></a>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="fas fa-cog"></i></i><span
+                        class="nav-text">SETTING USER</span></a>
                 <ul aria-expanded="false">
                     <li><a href="{{ route('users.index') }}">User List</a></li>
                 </ul>

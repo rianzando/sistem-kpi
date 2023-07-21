@@ -26,6 +26,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('/users', UserController::class);
     Route::put('/users/{id}/status', [UserController::class, 'updateStatus'])->name('users.updateStatus');
+    Route::get('/users/{id}/profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::put('/users/{id}/update', [UserController::class, 'updateprofile'])->name('users.updateprofile');
+
 });
 
 
