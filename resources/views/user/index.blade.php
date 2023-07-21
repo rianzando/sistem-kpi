@@ -1,55 +1,63 @@
 @extends('layouts.main')
 @section('title', 'List Users')
 @section('content')
-    <div class="content">
-        <div class="panel-header bg-primary-gradient">
-            <div class="page-inner py-5">
-                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
-                    <div>
-                        <h2 class="text-white pb-2 fw-bold">Users</h2>
-                        {{-- <h5 class="text-white op-7 mb-2">Free Bootstrap 4 Admin Dashboard</h5> --}}
-
-                    </div>
-                    <div class="ml-md-auto py-2 py-md-0">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Users</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Users List</li>
-                            </ol>
-                        </nav>
-                    </div>
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row page-titles mx-0">
+                <div class="col-sm-12 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">User List</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">User</a></li>
+                    </ol>
                 </div>
             </div>
-        </div>
-        <div class="page-inner mt--5">
+            <!-- row -->
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xl-12 col-xxl-12">
+                    @if (session()->has('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }} <i class="fas fa-check-circle"></i><button type="button"
+                                class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }} <i class="fas fa-times-circle"></i><button type="button" class="close"
+                                data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
                     <div class="card">
-                        <div class="card-header bg-light">
-                            <h4 class="card-title">List User Sistem KPI</h4>
-                            @if (session()->has('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ session('success') }} <i class="fas fa-check-circle"></i><button type="button"
-                                        class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
-                            @if (session()->has('error'))
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    {{ session('error') }} <i class="fas fa-times-circle"></i><button type="button"
-                                        class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
+                        <div class="card-header">
+                            <h4 class="card-title">List Data User</h4>
                         </div>
                         <div class="card-body">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form action="{{ route('users.index') }}" method="GET">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="keyword" class="form-control"
+                                        placeholder="Search by name or email" value="{{ $keyword }}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                    </div>
+                                </div>
+                            </form>
                             <div class="table-responsive">
                                 <a href="{{ route('users.create') }}" class="btn btn-sm btn-success"><i
                                         class="fa fa-plus-circle"> Add
                                         User</i></a>
-                                <table class="table table-bordered table-head-bg-info table-bordered-bd-info mt-4">
+                                <table class="table table-striped table-responsive-sm">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -61,7 +69,10 @@
                                             <th>Level</th>
                                             <th>Gender</th>
                                             <th>Status SPK</th>
-                                            <th style="width: 15%">Action</th>
+                                            <th>Status</th>
+                                            <th>Image</th>
+                                            <th>Action</th>
+                                            <th style="width: 15%"></th>
                                         </tr>
                                     </thead>
                                     @forelse ($users as $user)
@@ -79,16 +90,59 @@
                                                 <td>{{ $user->userdetail->gender }}</td>
                                                 <td>{{ $user->userdetail->spk_status }}</td>
                                                 <td>
+                                                    @if ($user->status === 'active')
+                                                        <span
+                                                            class="badge badge-rounded badge-outline-success">Active</span>
+                                                    @elseif ($user->status === 'inactive')
+                                                        <span
+                                                            class="badge badge-rounded badge-outline-danger">Inactive</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($user->userdetail->image)
+                                                        <img src="{{ asset('storage/' . $user->userdetail->image) }}"
+                                                            alt="User Image" width="100">
+                                                    @else
+                                                        No Image
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    @if ($user->status === 'active')
+                                                        <form class="d-line"
+                                                            action="{{ route('users.updateStatus', $user->id) }}"
+                                                            method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                                data-toggle="tooltip" data-placement="top" title="inactive">
+                                                                <i class="fa fa-times-circle"></i></button>
+                                                        </form>
+                                                    @elseif ($user->status === 'inactive')
+                                                        <form class="d-line"
+                                                            action="{{ route('users.updateStatus', $user->id) }}"
+                                                            method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit" class="btn btn-sm btn-success"
+                                                                data-toggle="tooltip" data-placement="top" title="active">
+                                                                <i class="fa fa-check-circle"></i></button>
+                                                        </form>
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     <a href="{{ route('users.edit', $user->id) }}"
-                                                        class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></a>
+                                                        class="btn btn-sm btn-warning" data-toggle="tooltip"
+                                                        data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
                                                     <a href="{{ route('users.show', $user->id) }}"
-                                                        class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>
+                                                        class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                                        data-placement="top" title="Show"><i class="fa fa-eye"></i></a>
                                                     <form class="d-inline" method="post"
                                                         action="{{ route('users.destroy', $user->id) }}"
                                                         data-user="{{ $user->id }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="button" class="btn btn-sm btn-danger delete-btn">
+                                                        <button type="button" class="btn btn-sm btn-danger delete-btn"
+                                                            data-toggle="tooltip" data-placement="top" title="Delete">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </form>
@@ -103,15 +157,15 @@
                                         </tfoot>
                                     @endforelse
                                 </table>
-                                {{ $users->links() }}
+                                {{ $users->appends(['keyword' => $keyword])->links() }}
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+
     <!-- Add the following script at the bottom of the view -->
     <script>
         // Add a click event listener to the delete buttons

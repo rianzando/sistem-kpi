@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedInteger('user_id');
             $table->bigInteger('nik');
             $table->string('domisili');
+            $table->bigInteger('phone')->nullable();
             $table->text('address')->nullable();
             $table->unsignedInteger('departement_id');
             $table->string('position');

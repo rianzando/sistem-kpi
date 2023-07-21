@@ -17,6 +17,7 @@ class UserDetailSeeder extends Seeder
         $detailuser = [
             'user_id' => '1',
             'nik' => '1234567890',
+            'phone' => '089767571238',
             'domisili' => 'Non-lokal',
             'address' => 'Jl. Pagentongan',
             'departement_id' => 1,
@@ -27,7 +28,7 @@ class UserDetailSeeder extends Seeder
             'first_work_date' => date(now()),
             'end_work_date' =>  date(now()),
             'place_of_birth' => 'Bogor',
-            'date_of_birth' => Carbon::create('1994', '02', '25'),
+            'date_of_birth' =>  date(now()),
             'gender' => 'Laki-laki',
             'education' => 'Bachelor',
             'name_of_place' => 'University',

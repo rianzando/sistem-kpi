@@ -14,6 +14,7 @@ class UserDetail extends Model
         'nik',
         'domisili',
         'address',
+        'phone',
         'departement_id',
         'position',
         'level',

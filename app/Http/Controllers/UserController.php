@@ -9,17 +9,33 @@ use App\Models\UserDetail;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role', 'userdetail')->paginate(10); // Menggunakan paginate dengan 10 item per halaman
-        return view('user.index', compact('users'));
+    $keyword = $request->input('keyword'); // Mendapatkan kata kunci pencarian dari request
+    $perPage = $request->input('perpage', 10); // Mendapatkan jumlah item per halaman dari request (default: 10)
+
+    $query = User::with('role', 'userdetail');
+
+    // Jika ada kata kunci pencarian, tambahkan kondisi pencarian ke query
+    if (!empty($keyword)) {
+        $query->where('name', 'LIKE', '%' . $keyword . '%')
+              ->orWhere('email', 'LIKE', '%' . $keyword . '%');
+    }
+
+    $users = $query->paginate($perPage);
+
+    return view('user.index', compact('users', 'keyword', 'perPage'));
     }
 
     /**
@@ -69,6 +85,7 @@ class UserController extends Controller
             $userDetail->domisili = $request->domisili;
             $userDetail->departement_id = $request->departement_id;
             $userDetail->address = $request->address;
+            $userDetail->phone = $request->phone;
             $userDetail->position = $request->position;
             $userDetail->location = $request->location;
             $userDetail->level = $request->level;
@@ -130,7 +147,7 @@ class UserController extends Controller
     {
     try {
         // Find the user by ID along with its user_detail
-        $user = User::with('userDetail')->findOrFail($id);
+        $user = User::with('userdetail')->findOrFail($id);
 
         // Fetch all roles and departements for dropdowns
         $roles = Role::all();
@@ -186,6 +203,7 @@ class UserController extends Controller
             $userDetail->domisili = $request->domisili;
             $userDetail->departement_id = $request->departement_id;
             $userDetail->address = $request->address;
+            $userDetail->phone = $request->phone;
             $userDetail->position = $request->position;
             $userDetail->location = $request->location;
             $userDetail->level = $request->level;
@@ -213,7 +231,7 @@ class UserController extends Controller
             $userDetail->save();
 
             // Redirect to the user profile page with success message
-            return redirect()->route('profile', $id)->with('success', 'User data has been updated successfully!');
+            return redirect()->route('users.index')->with('success', 'User data has been updated successfully!');
         } catch (\Throwable $th) {
             // Handle database query exception
             return redirect()->back()->withInput()->withErrors(['error' => 'Failed to update user data. ' . $th->getMessage()]);
@@ -221,6 +239,15 @@ class UserController extends Controller
             // Handle other general exceptions
             return redirect()->route('users.index')->with('error', 'An error occurred. Please try again or contact the administrator.');
         }
+
+    //     return redirect()->route('users.index')->with('success', 'Pengguna berhasil diupdate!');
+    // } catch (QueryException $e) {
+    //         dd($e->getMessage()); // Tampilkan pesan kesalahan query database
+    //         return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
+    //     } catch (\Exception $e) {
+    //         dd($e->getMessage()); // Tampilkan pesan kesalahan umum
+    //         return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
+    //     }
     }
 
 
@@ -249,6 +276,121 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             // Tangkap exception jika ada masalah dalam menghapus data
             return redirect()->route('users.index')->with('error', 'Gagal menghapus pengguna. ' . $th->getMessage());
+        }
+    }
+
+
+
+    public function updateStatus(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        try {
+            DB::beginTransaction();
+
+            // Mengubah status pengguna
+            if ($user->status === 'active') {
+                $user->status = 'inactive';
+            } elseif ($user->status === 'inactive') {
+                $user->status = 'active';
+            }
+
+            $user->save();
+
+            // Send the notification email to the user
+            // Mail::to($user->email)->send(new UserStatusApprovedMail($user));
+
+            DB::commit();
+            return redirect()->route('users.index')->with('success', 'Status User berhasil diubah!');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('users.index')->with('error', 'Gagal mengubah status User');
+        }
+    }
+
+    function profile()
+    {
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // If the user is logged in, show their profile
+        if ($user) {
+            return view('user.profile', compact('user'));
+        } else {
+            // If the user is not logged in, redirect them to the login page
+            return redirect()->route('login')->with('error', 'You need to log in to view your profile.');
+        }
+    }
+
+
+    public function updateprofile(Request $request, $id)
+    {
+        // dd($request->all());
+        try {
+            // Validate the input fields
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                // Add more validation rules for other fields if needed
+            ]);
+
+            // Find the user by ID
+            $user = User::find($id);
+            if (!$user) {
+                return redirect()->route('users.profile', $id)->with('error', 'User not found.');
+            }
+
+            // Update the user data
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            // If a new password is provided, update the password
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+
+            // Save the changes to the user model
+            $user->save();
+
+            // Find or create userdetail for the user
+            $userdetail = UserDetail::where('user_id', $id)->first();
+            if (!$userdetail) {
+                // If userdetail doesn't exist, create a new record
+                $userdetail = new UserDetail();
+                $userdetail->user_id = $user->id;
+            }
+
+            // Update the userdetail data
+            $userdetail->nik = $request->input('nik');
+            $userdetail->domisili = $request->input('domisili');
+            $userdetail->phone = $request->input('phone');
+            $userdetail->address = $request->input('address');
+            $userdetail->place_of_birth = $request->input('place_of_birth');
+            $userdetail->date_of_birth = $request->input('date_of_birth');
+            $userdetail->education = $request->input('education');
+            $userdetail->name_of_place = $request->input('name_of_place');
+            $userdetail->major = $request->input('major');
+
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($userdetail->image) {
+                    Storage::delete('public/' . $userdetail->image);
+                }
+
+                // Update image if new image is uploaded
+                $imagePath = $request->file('image')->store('images', 'public');
+                $userdetail->image = $imagePath;
+            }
+            // Save the changes to the userdetail model
+            $userdetail->save();
+            // dd($request->all());
+
+            return redirect()->route('users.profile', $id)->with('success', 'Profile updated successfully.');
+        } catch (\Throwable $th) {
+            // Log the error for debugging purposes
+            Log::error('Error updating profile: ' . $th->getMessage());
+            Log::error($th->getTraceAsString());
+
+            return redirect()->route('users.profile', $id)->with('error', 'An error occurred while updating the profile.');
         }
     }
 }

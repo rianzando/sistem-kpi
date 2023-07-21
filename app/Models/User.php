@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class)->withDefault();
     }
 
+
+    public function kpiCorporates()
+    {
+        return $this->hasMany(KpiCorporate::class);
+    }
     // public function roles()
     // {
     //     return $this->belongsToMany(Role::class, ReferenceHasRole::class, 'reference_id')->wherePivot('reference_type', FeatureEnum::USER);
