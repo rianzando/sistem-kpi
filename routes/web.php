@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KpiCorporateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{id}/profile', [UserController::class, 'profile'])->name('users.profile');
     Route::put('/users/{id}/update', [UserController::class, 'updateprofile'])->name('users.updateprofile');
 
+
+    Route::resource('/corporates', KpiCorporateController::class);
 });
 
 

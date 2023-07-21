@@ -17,8 +17,5 @@ class DashboardController extends Controller
             // Load the dashboard view and pass the authenticated user data
             return view('dashboard.index', compact('user'));
         }
-
-        // If the user is not authenticated, redirect to the login page
-        return redirect()->route('login');
     }
 }
