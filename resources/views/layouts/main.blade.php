@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>KPI | @yield('title') </title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/images/favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('backend/vendor/owl-carousel/css/owl.carousel.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
-    <link href="{{ asset('backend/vendor/jqvmap/css/jqvmap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('backend/css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('back/images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ asset('back/vendor/owl-carousel/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('back/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
+    <link href="{{ asset('back/vendor/jqvmap/css/jqvmap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('back/css/style.css') }}" rel="stylesheet">
 
     {{-- sweetalert  --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
@@ -47,9 +47,9 @@
         ***********************************-->
         <div class="nav-header">
             <a href="index.html" class="brand-logo">
-                {{-- <img class="logo-abbr" src="{{ asset('backend/images/logo-mpk.png') }}" alt="">
-                <img class="logo-compact" src="{{ asset('backend/images/logo-mpk.png') }}" alt=""> --}}
-                <img class="brand-title" src="{{ asset('backend/images/logo-mpk.png') }}" alt="">
+                {{-- <img class="logo-abbr" src="{{ asset('back/images/logo-mpk.png') }}" alt="">
+                <img class="logo-compact" src="{{ asset('back/images/logo-mpk.png') }}" alt=""> --}}
+                <img class="brand-title" src="{{ asset('back/images/logo-mpk.png') }}" alt="">
             </a>
 
             <div class="nav-control">
@@ -157,35 +157,35 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="{{ asset('backend/vendor/global/global.min.js') }}"></script>
-    <script src="{{ asset('backend/js/quixnav-init.js') }}"></script>
-    <script src="{{ asset('backend/js/custom.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/global/global.min.js') }}"></script>
+    <script src="{{ asset('back/js/quixnav-init.js') }}"></script>
+    <script src="{{ asset('back/js/custom.min.js') }}"></script>
 
 
     <!-- Vectormap -->
-    <script src="{{ asset('backend/vendor/raphael/raphael.min.js') }}"></script>
-    <script src="{{ asset('backend/vendor/morris/morris.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/raphael/raphael.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/morris/morris.min.js') }}"></script>
 
 
-    <script src="{{ asset('backend/vendor/circle-progress/circle-progress.min.js') }}"></script>
-    <script src="{{ asset('backend/vendor/chart.js/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/circle-progress/circle-progress.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/chart.js/Chart.bundle.min.js') }}"></script>
 
-    <script src="{{ asset('backend/vendor/gaugeJS/dist/gauge.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/gaugeJS/dist/gauge.min.js') }}"></script>
 
     <!--  flot-chart js -->
-    <script src="{{ asset('backend/vendor/flot/jquery.flot.js') }}"></script>
-    <script src="{{ asset('backend/vendor/flot/jquery.flot.resize.js') }}"></script>
+    <script src="{{ asset('back/vendor/flot/jquery.flot.js') }}"></script>
+    <script src="{{ asset('back/vendor/flot/jquery.flot.resize.js') }}"></script>
 
     <!-- Owl Carousel -->
-    <script src="{{ asset('backend/vendor/owl-carousel/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/owl-carousel/js/owl.carousel.min.js') }}"></script>
 
     <!-- Counter Up -->
-    <script src="{{ asset('backend/vendor/jqvmap/js/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('backend/vendor/jqvmap/js/jquery.vmap.usa.js') }}"></script>
-    <script src="{{ asset('backend/vendor/jquery.counterup/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/jqvmap/js/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/jqvmap/js/jquery.vmap.usa.js') }}"></script>
+    <script src="{{ asset('back/vendor/jquery.counterup/jquery.counterup.min.js') }}"></script>
 
 
-    <script src="{{ asset('backend/js/dashboard/dashboard-1.js') }}"></script>
+    <script src="{{ asset('back/js/dashboard/dashboard-1.js') }}"></script>
 
     {{-- sweetalert  --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
