@@ -21,10 +21,25 @@ class KpiCorporate extends Model
         'user_id',
     ];
 
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::saving(function ($corporate) {
+            if ($corporate->achievement < 40) {
+                $corporate->status = 'Open';
+            } elseif ($corporate->achievement < 100) {
+                $corporate->status = 'On Progress';
+            } else {
+                $corporate->status = 'Done';
+            }
+        });
+    }
+
     // Define the relationship with the User model
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
 }

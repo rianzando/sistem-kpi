@@ -11,28 +11,28 @@ class KpiCorporateController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    try {
-        // Get the search keyword from the query parameter 'q'
-        $keyword = $request->query('q');
+    {
+        try {
+            // Get the search keyword from the query parameter 'q'
+            $keyword = $request->query('q');
 
-        // Get the number of items per page from the query parameter 'per_page'
-        $perPage = $request->query('per_page', 10);
+            // Get the number of items per page from the query parameter 'per_page'
+            $perPage = $request->query('per_page', 10);
 
-        // Query the KpiCorporate model based on the search keyword
-        $query = KpiCorporate::query();
-        if ($keyword) {
-            $query->where('kpi_corporate', 'LIKE', '%' . $keyword . '%');
+            // Query the KpiCorporate model based on the search keyword
+            $query = KpiCorporate::query();
+            if ($keyword) {
+                $query->where('kpi_corporate', 'LIKE', '%' . $keyword . '%');
+            }
+
+            // Fetch the KPI corporates with pagination
+            $kpiCorporates = $query->paginate($perPage);
+
+            return view('corporate.index', compact('kpiCorporates', 'keyword', 'perPage'));
+        } catch (\Throwable $th) {
+            return redirect()->route('home')->with('error', 'An error occurred while fetching KPI corporates.');
         }
-
-        // Fetch the KPI corporates with pagination
-        $kpiCorporates = $query->paginate($perPage);
-
-        return view('corporate.index', compact('kpiCorporates', 'keyword', 'perPage'));
-    } catch (\Throwable $th) {
-        return redirect()->route('home')->with('error', 'An error occurred while fetching KPI corporates.');
     }
-}
 
     /**
      * Show the form for creating a new resource.
@@ -47,25 +47,41 @@ class KpiCorporateController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            // Validate the input fields
-            $request->validate([
-                'coporate' => 'nullable|string|max:255',
-                'goals' => 'nullable|string',
-                'kpi_corporate' => 'required|string|max:255',
-                'target_corporate' => 'required|string|max:255',
-                'bobot' => 'required|integer',
-                'year' => 'required|integer',
-                'achievement' => 'nullable|integer',
-                'status' => 'nullable|string|max:255',
-            ]);
+        // Validasi input dari form
+        $request->validate([
+            'goals' => 'required|string',
+            'kpi_corporate' => 'required|string',
+            'target_corporate' => 'nullable|string',
+            'bobot' => 'required|numeric',
+            'year' => 'required|integer|between:1900,' . (date('Y') + 50),
+            'achievement' => 'required|numeric',
+        ]);
 
-            // Create the new KPI corporate
-            KpiCorporate::create($request->all());
+        // Simpan data ke database
+        $corporate = new KpiCorporate();
+        $corporate->user_id = auth()->user()->id;
+        $corporate->goals = $request->input('goals');
+        $corporate->kpi_corporate = $request->input('kpi_corporate');
+        $corporate->target_corporate = $request->input('target_corporate');
+        $corporate->bobot = $request->input('bobot');
+        $corporate->year = $request->input('year');
+        $corporate->achievement = $request->input('achievement');
+        $corporate->status = $this->calculateStatus($request->input('achievement'));
+        $corporate->save();
 
-            return redirect()->route('corporates.index')->with('success', 'KPI corporate created successfully.');
-        } catch (\Throwable $th) {
-            return redirect()->route('corporates.index')->with('error', 'An error occurred while creating the KPI corporate.');
+        // Redirect ke halaman yang diinginkan (misalnya halaman index)
+        return redirect()->route('corporates.index')->with('success', 'Corporate data has been saved successfully.');
+    }
+
+    // Fungsi untuk menghitung nilai status berdasarkan achievement
+    private function calculateStatus($achievement)
+    {
+        if ($achievement < 40) {
+            return 'Open';
+        } elseif ($achievement < 100) {
+            return 'On Progress';
+        } else {
+            return 'Done';
         }
     }
 
@@ -88,8 +104,8 @@ class KpiCorporateController extends Controller
     public function edit($id)
     {
         try {
-            $kpiCorporate = KpiCorporate::findOrFail($id);
-            return view('corporate.edit', compact('kpiCorporate'));
+            $corporate = KpiCorporate::findOrFail($id);
+            return view('corporate.edit', compact('corporate'));
         } catch (\Throwable $th) {
             return redirect()->route('corporates.index')->with('error', 'KPI corporate not found.');
         }
@@ -100,28 +116,31 @@ class KpiCorporateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $kpiCorporate = KpiCorporate::findOrFail($id);
+        // Validasi input dari form
+        $request->validate([
+            'goals' => 'required|string',
+            'kpi_corporate' => 'required|string',
+            'target_corporate' => 'nullable|string',
+            'bobot' => 'required|numeric',
+            'year' => 'required|integer|between:1900,' . (date('Y') + 50),
+            'achievement' => 'required|numeric',
+        ]);
 
-            // Validate the input fields
-            $request->validate([
-                'coporate' => 'nullable|string|max:255',
-                'goals' => 'nullable|string',
-                'kpi_corporate' => 'required|string|max:255',
-                'target_corporate' => 'required|string|max:255',
-                'bobot' => 'required|integer',
-                'year' => 'required|integer',
-                'achievement' => 'nullable|integer',
-                'status' => 'nullable|string|max:255',
-            ]);
+        // Cari data KpiCorporate berdasarkan ID
+        $corporate = KpiCorporate::findOrFail($id);
 
-            // Update the KPI corporate data
-            $kpiCorporate->update($request->all());
+        // Perbarui data KpiCorporate dengan data dari form
+        $corporate->goals = $request->input('goals');
+        $corporate->kpi_corporate = $request->input('kpi_corporate');
+        $corporate->target_corporate = $request->input('target_corporate');
+        $corporate->bobot = $request->input('bobot');
+        $corporate->year = $request->input('year');
+        $corporate->achievement = $request->input('achievement');
+        $corporate->status = $this->calculateStatus($request->input('achievement'));
+        $corporate->save();
 
-            return redirect()->route('corporates.show', $id)->with('success', 'KPI corporate updated successfully.');
-        } catch (\Throwable $th) {
-            return redirect()->route('corporates.index')->with('error', 'An error occurred while updating the KPI corporate.');
-        }
+        // Redirect ke halaman yang diinginkan (misalnya halaman index)
+        return redirect()->route('corporates.index')->with('success', 'Corporate data has been updated successfully.');
     }
 
     /**
@@ -130,8 +149,8 @@ class KpiCorporateController extends Controller
     public function destroy($id)
     {
         try {
-            $kpiCorporate = KpiCorporate::findOrFail($id);
-            $kpiCorporate->delete();
+            $corporate = KpiCorporate::findOrFail($id);
+            $corporate->delete();
 
             return redirect()->route('corporates.index')->with('success', 'KPI corporate deleted successfully.');
         } catch (\Throwable $th) {

@@ -47,7 +47,7 @@
                             <form action="{{ route('corporates.index') }}" method="GET">
                                 <div class="input-group mb-3">
                                     <input type="text" name="keyword" class="form-control"
-                                        placeholder="Search by name or email" value="{{ $keyword }}">
+                                        placeholder="Search by target kpi corporate" value="{{ $keyword }}">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="submit">Search</button>
                                     </div>
@@ -67,6 +67,7 @@
                                             <th>Bobot</th>
                                             <th>Achivement</th>
                                             <th>Status</th>
+                                            <th>Created by</th>
                                             <th style="width: 15%"></th>
                                         </tr>
                                     </thead>
@@ -80,13 +81,22 @@
                                                 <td>{{ $corporates->bobot }}</td>
                                                 <td>{{ $corporates->achievement }}</td>
                                                 <td>{{ $corporates->status }}</td>
+                                                <td>{{ $corporates->user->name }}</td>
                                                 <td>
                                                     <a href="{{ route('corporates.edit', $corporates->id) }}"
                                                         class="btn btn-sm btn-warning" data-toggle="tooltip"
                                                         data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                                    <a href="{{ route('corporates.show', $corporates->id) }}"
-                                                        class="btn btn-sm btn-primary" data-toggle="tooltip"
-                                                        data-placement="top" title="Show"><i class="fa fa-eye"></i></a>
+                                                    <button class="btn btn-sm btn-primary btn-show" data-toggle="modal"
+                                                        data-target="#detailModal" data-goals="{{ $corporates->goals }}"
+                                                        data-kpi="{{ $corporates->kpi_corporate }}"
+                                                        data-target_corporate="{{ $corporates->target_corporate }}"
+                                                        data-bobot="{{ $corporates->bobot }}"
+                                                        data-year="{{ $corporates->year }}"
+                                                        data-achievement="{{ $corporates->achievement }}"
+                                                        data-status="{{ $corporates->status }}" data-toggle="tooltip"
+                                                        data-placement="top" title="show">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
                                                     <form class="d-inline" method="post"
                                                         action="{{ route('corporates.destroy', $corporates->id) }}"
                                                         data-user="{{ $corporates->id }}">
@@ -116,4 +126,93 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">KPI Corporate Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Goals:</strong> <span id="modal-goals"></span></p>
+                    <p><strong>KPI Corporate:</strong> <span id="modal-kpi"></span></p>
+                    <p><strong>Target Corporate:</strong> <span id="modal-target"></span></p>
+                    <p><strong>Bobot:</strong> <span id="modal-bobot"></span></p>
+                    <p><strong>Year:</strong> <span id="modal-year"></span></p>
+                    <p><strong>Achievement:</strong> <span id="modal-achievement"></span></p>
+                    <p><strong>Status:</strong> <span id="modal-status"></span></p>
+                    <!-- Add other fields as needed -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Function to handle the modal data
+        function openModal(event) {
+            const button = event.currentTarget;
+            const goals = button.dataset.goals;
+            const kpi = button.dataset.kpi;
+            const target = button.dataset.target_corporate; // Corrected attribute name
+            const bobot = button.dataset.bobot;
+            const year = button.dataset.year;
+            const achievement = button.dataset.achievement;
+            const status = button.dataset.status;
+
+            // Set the data to the modal elements
+            document.getElementById('modal-goals').textContent = goals;
+            document.getElementById('modal-kpi').textContent = kpi;
+            document.getElementById('modal-target').textContent = target;
+            document.getElementById('modal-bobot').textContent = bobot;
+            document.getElementById('modal-year').textContent = year;
+            document.getElementById('modal-achievement').textContent = achievement;
+            document.getElementById('modal-status').textContent = status;
+        }
+
+        // Add event listener to each "Show" button to open the modal
+        const showButtons = document.querySelectorAll('.btn-show');
+        showButtons.forEach(button => {
+            button.addEventListener('click', openModal);
+        });
+    </script>
+
+
+    <script>
+        // Function to show the SweetAlert confirmation dialog
+        function showDeleteConfirmation(form) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to delete this KPI Corporate data. This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user clicks 'Yes', submit the form
+                    form.submit();
+                }
+            });
+        }
+
+        // Add an event listener to the delete buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach((button) => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('form');
+                    showDeleteConfirmation(form);
+                });
+            });
+        });
+    </script>
 @endsection

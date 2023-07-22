@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('target_corporate');
             $table->integer('bobot');
             $table->year('year');
-            $table->integer('achievement')->nullable();
+            $table->integer('achievement')->nullable()->default(0);
             $table->string('status')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
