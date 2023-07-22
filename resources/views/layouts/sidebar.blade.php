@@ -8,6 +8,19 @@
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 </ul>
             </li>
+            <li class="nav-label">Directorates</li>
+            <li>
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                        class="icon icon-app-store"></i><span class="nav-text">DIRECTORATES</span></a>
+                <ul aria-expanded="false">
+                    <li @if (request()->is('directorates')) class="active" @endif>
+                        <a href="{{ route('directorates.index') }}">Directorate</a>
+                    </li>
+                    <li>
+                        <a href="./app-calender.html">Departement</a>
+                    </li>
+                </ul>
+            </li>
             <li class="nav-label">Kpi Setting</li>
             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                         class="icon icon-app-store"></i><span class="nav-text">KPI</span></a>

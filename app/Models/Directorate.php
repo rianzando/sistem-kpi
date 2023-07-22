@@ -15,6 +15,6 @@ class Directorate extends Model
 
     public function departement()
     {
-        return $this->hasOne(Departement::class);
+        return $this->hasMany(Departement::class);
     }
 }

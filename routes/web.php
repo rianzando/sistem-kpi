@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DirectorateController;
 use App\Http\Controllers\KpiCorporateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -17,9 +18,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.main');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/', function () {
+        return view('auth.login');
+    });
 });
+
 
 Route::middleware(['auth'])->group(function () {
 
@@ -32,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::resource('/corporates', KpiCorporateController::class);
+    Route::resource('/directorates', DirectorateController::class);
 });
 
 
