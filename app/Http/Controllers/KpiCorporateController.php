@@ -14,22 +14,20 @@ class KpiCorporateController extends Controller
     public function index(Request $request)
     {
         try {
-            // Get the search keyword from the query parameter 'q'
-            $keyword = $request->query('q');
-
-            // Get the number of items per page from the query parameter 'per_page'
-            $perPage = $request->query('per_page', 10);
+            $perPage = $request->query('perPage', 5); // Mengambil nilai perPage dari query parameter, default 5
+            $search = $request->query('search'); // Mengambil nilai search dari query parameter
 
             // Query the KpiCorporate model based on the search keyword
             $query = KpiCorporate::query();
-            if ($keyword) {
-                $query->where('kpi_corporate', 'LIKE', '%' . $keyword . '%');
+            if ($search) {
+                $query->where('kpi_corporate', 'LIKE', '%' . $search . '%');
             }
 
             // Fetch the KPI corporates with pagination
             $kpiCorporates = $query->paginate($perPage);
+            $entries = [5, 10, 25, 50]; // Pilihan jumlah data entries per halaman
 
-            return view('corporate.index', compact('kpiCorporates', 'keyword', 'perPage'));
+            return view('corporate.index', compact('kpiCorporates',  'perPage', 'entries', 'search'));
         } catch (\Throwable $th) {
             return redirect()->route('home')->with('error', 'An error occurred while fetching KPI corporates.');
         }

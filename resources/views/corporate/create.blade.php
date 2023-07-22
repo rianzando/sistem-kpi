@@ -32,15 +32,15 @@
                     @endif
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Create User</h4>
+                            <h4 class="card-title">Create KPI Corporate</h4>
                             <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary float-right">Back</a>
 
                         </div>
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Add New KPI Corporate</h4>
-                                <a href="{{ route('corporates.index') }}"
-                                    class="btn btn-sm btn-default float-right">Back</a>
+                                {{-- <a href="{{ route('corporates.index') }}"
+                                    class="btn btn-sm btn-default float-right">Back</a> --}}
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('corporates.store') }}" method="post" enctype="multipart/form-data">
