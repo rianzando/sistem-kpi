@@ -19,6 +19,7 @@ class KpiCorporate extends Model
         'achievement',
         'status',
         'user_id',
+        'updated',
     ];
 
 

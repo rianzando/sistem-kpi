@@ -68,6 +68,7 @@
                                             <th>Achivement</th>
                                             <th>Status</th>
                                             <th>Created by</th>
+                                            <th>Updated by</th>
                                             <th style="width: 15%"></th>
                                         </tr>
                                     </thead>
@@ -81,6 +82,7 @@
                                                 <td>{{ $corporates->bobot }}</td>
                                                 <td>{{ $corporates->achievement }}</td>
                                                 <td>{{ $corporates->status }}</td>
+                                                <td>{{ $corporates->user->name }}</td>
                                                 <td>{{ $corporates->user->name }}</td>
                                                 <td>
                                                     <a href="{{ route('corporates.edit', $corporates->id) }}"

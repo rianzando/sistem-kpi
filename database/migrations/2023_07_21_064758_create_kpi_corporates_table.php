@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('achievement')->nullable()->default(0);
             $table->string('status')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('updated')->nullable();
             $table->timestamps();
         });
     }

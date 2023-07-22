@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KpiCorporate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KpiCorporateController extends Controller
 {
@@ -137,6 +138,7 @@ class KpiCorporateController extends Controller
         $corporate->year = $request->input('year');
         $corporate->achievement = $request->input('achievement');
         $corporate->status = $this->calculateStatus($request->input('achievement'));
+        $corporate->updated = Auth::id();
         $corporate->save();
 
         // Redirect ke halaman yang diinginkan (misalnya halaman index)
