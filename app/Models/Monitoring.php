@@ -7,41 +7,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class KpiDepartment extends Model
+class Monitoring extends Model
 {
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'kpi_directorate_id',
-        'departement_id',
-        'framework',
-        'kpi_departement',
-        'target_departement',
-        'year',
+        'kpi_departement_id',
         'start_date',
         'end_date',
-        'achievement',
+        'current_progress',
+        'follow_up',
+        'achivement',
         'status',
         'user_id',
         'updated',
-        'deleted',
     ];
 
-
-    public function departement(): BelongsTo
-    {
-        return $this->belongsTo(Departement::class)->withDefault();
-    }
-
-
+    /**
+     * Get the user that owns the Monitoring
+     *
+     * @return \Illuminate\Database\El -   */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withDefault();
     }
 
-
-    public function kpidirectorate(): BelongsTo
+    /**
+     * Get the kpidepartement that owns the Monitoring
+     *
+     * @return \Illuminate\KpiDepartmentbase\Eloquent\Relations\BelongsTo
+     */
+    public function kpidepartement(): BelongsTo
     {
-        return $this->belongsTo(KpiDirectorate::class)->withDefault();
+        return $this->belongsTo(KpiDepartment::class)->withDefault();
     }
 }

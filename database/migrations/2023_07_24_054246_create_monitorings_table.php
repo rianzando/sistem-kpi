@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kpi_directorates', function (Blueprint $table) {
+        Schema::create('monitorings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('kpi_directorate_id');
-            $table->unsignedBigInteger('directorate_id');
-            $table->string('kpi_directorate');
-            $table->string('target');
-            $table->text('description')->nullable();
-            $table->year('year');
-            $table->integer('achievement');
-            $table->string('status');
+            $table->unsignedBigInteger('kpi_departement_id');
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
+            $table->text('current_progress')->nullable();
+            $table->text('follow_up')->nullable();
+            $table->integer('achivement')->default(0);
+            $table->string('status')->default('Open');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('updated')->nullable();
-            $table->unsignedBigInteger('deleted')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kpi_directorates');
+        Schema::dropIfExists('monitorings');
     }
 };

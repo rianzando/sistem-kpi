@@ -13,7 +13,21 @@ return new class extends Migration
     {
         Schema::create('kpi_departments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('kpi_directorate_id');
+            $table->unsignedBigInteger('departement_id');
+            $table->string('framework');
+            $table->string('kpi_departement');
+            $table->string('target_departement')->nullable();
+            $table->year('year');
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
+            $table->integer('achievement')->nullable();
+            $table->string('status')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('updated')->nullable();
+            $table->unsignedBigInteger('deleted')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
