@@ -13,22 +13,22 @@ class DirectorateController extends Controller
     public function index(Request $request)
     {
         try {
-             // Get the search keyword from the query parameter 'q'
-             $keyword = $request->query('q');
+            $perPage = $request->query('perPage', 5); // Mengambil nilai perPage dari query parameter, default 5
+            $search = $request->query('search'); // Mengambil nilai search dari query parameter
 
-             // Get the number of items per page from the query parameter 'per_page'
-             $perPage = $request->query('per_page', 10);
+
 
              // Query the KpiCorporate model based on the search keyword
              $query = Directorate::query();
-             if ($keyword) {
-                 $query->where('name', 'LIKE', '%' . $keyword . '%');
+             if ($search) {
+                 $query->where('name', 'LIKE', '%' . $search . '%');
              }
 
              // Fetch the KPI corporates with pagination
              $directorates = $query->paginate($perPage);
+             $entries = [5,10,25,50];
 
-            return view('directorate.index', compact('directorates', 'keyword'));
+            return view('directorate.index', compact('directorates','perPage', 'entries', 'search'));
         } catch (\Exception $e) {
             return redirect()->route('directorates.index')
                 ->with('error', 'Failed to fetch Directorates. Error: ' . $e->getMessage());

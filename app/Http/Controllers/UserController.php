@@ -22,20 +22,20 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-    $keyword = $request->input('keyword'); // Mendapatkan kata kunci pencarian dari request
+    $search = $request->input('search'); // Mendapatkan kata kunci pencarian dari request
     $perPage = $request->input('perpage', 10); // Mendapatkan jumlah item per halaman dari request (default: 10)
 
-    $query = User::with('role', 'userdetail');
+    $query = User::query();
 
     // Jika ada kata kunci pencarian, tambahkan kondisi pencarian ke query
-    if (!empty($keyword)) {
-        $query->where('name', 'LIKE', '%' . $keyword . '%')
-              ->orWhere('email', 'LIKE', '%' . $keyword . '%');
+    if ($search) {
+        $query->where('name', 'LIKE', '%' . $search . '%');
     }
 
     $users = $query->paginate($perPage);
+    $entries = [5, 10, 25, 50]; // Pilihan jumlah data entries per halaman
 
-    return view('user.index', compact('users', 'keyword', 'perPage'));
+    return view('user.index', compact('users', 'search', 'perPage','entries'));
     }
 
     /**

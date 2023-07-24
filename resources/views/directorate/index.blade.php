@@ -44,20 +44,38 @@
                                     </ul>
                                 </div>
                             @endif
-                            <form action="{{ route('directorates.index') }}" method="GET">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="keyword" class="form-control" placeholder="Search"
-                                        value="{{ $keyword }}">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="submit">Search</button>
-                                    </div>
-                                </div>
-                            </form>
                             <div class="table-responsive">
                                 <a href="#" class="btn btn-outline-success" data-toggle="modal"
                                     data-target="#addDirectorateModal">
                                     <i class="fa fa-plus-circle"></i>
                                 </a>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <form action="{{ route('directorates.index') }}" method="GET">
+                                            <label for="perPage">Show:</label>
+                                            <select name="perPage" id="perPage" onchange="this.form.submit()">
+                                                @foreach ($entries as $entry)
+                                                    <option value="{{ $entry }}"
+                                                        {{ $perPage == $entry ? 'selected' : '' }}>
+                                                        {{ $entry }}</option>
+                                                @endforeach
+                                            </select>
+                                        </form>
+                                        <div class="card-tools">
+                                            <form action="{{ route('directorates.index') }}" method="GET">
+                                                <div class="input-group input-group-sm" style="width: 150px;">
+                                                    <input type="text" name="search" value="{{ $search }}"
+                                                        class="form-control float-right" placeholder="Search">
+                                                    <div class="input-group-append">
+                                                        <button type="submit" class="btn btn-default">
+                                                            <i class="fas fa-search"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <table class="table table-striped table-responsive-sm">
                                     <thead>
                                         <tr>
@@ -101,7 +119,7 @@
                                         </tfoot>
                                     @endforelse
                                 </table>
-                                {{ $directorates->appends(['keyword' => $keyword])->links() }}
+                                {{ $directorates->links() }}
                             </div>
                         </div>
                     </div>
