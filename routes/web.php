@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\DirectorateController;
 use App\Http\Controllers\KpiCorporateController;
 use App\Http\Controllers\UserController;
@@ -37,7 +38,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('/corporates', KpiCorporateController::class);
     Route::resource('/directorates', DirectorateController::class);
+    Route::resource('/departements', DepartementController::class);
 });
+
 
 
 // user route

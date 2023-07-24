@@ -16,8 +16,8 @@
                     <li @if (request()->is('directorates')) class="active" @endif>
                         <a href="{{ route('directorates.index') }}">Directorate</a>
                     </li>
-                    <li>
-                        <a href="./app-calender.html">Departement</a>
+                    <li @if (request()->is('departements')) class="active" @endif>
+                        <a href="{{ route('departements.index') }}">Departement</a>
                     </li>
                 </ul>
             </li>
