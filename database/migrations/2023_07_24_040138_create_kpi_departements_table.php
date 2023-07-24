@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kpi_departments', function (Blueprint $table) {
+        Schema::create('kpi_departements', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kpi_directorate_id');
             $table->unsignedBigInteger('departement_id');

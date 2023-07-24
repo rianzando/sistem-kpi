@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KpiDepartment;
 use Illuminate\Http\Request;
 
-class KpiDepartmentController extends Controller
+class KpiDepartementController extends Controller
 {
     /**
      * Display a listing of the resource.
