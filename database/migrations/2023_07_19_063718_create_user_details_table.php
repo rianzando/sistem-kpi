@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('phone')->nullable();
             $table->text('address')->nullable();
             $table->unsignedInteger('directorate_id');
-            $table->json('departement_id')->nullable();
+            $table->unsignedBigInteger('departement_id');
             $table->string('position');
             $table->string('level');
             $table->string('location');
