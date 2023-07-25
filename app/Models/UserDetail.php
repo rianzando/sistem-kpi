@@ -15,6 +15,7 @@ class UserDetail extends Model
         'domisili',
         'address',
         'phone',
+        'directorate_id',
         'departement_id',
         'position',
         'level',
@@ -34,6 +35,11 @@ class UserDetail extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function directorate()
+    {
+        return $this->belongsTo(Directorate::class);
     }
 
     public function departement()

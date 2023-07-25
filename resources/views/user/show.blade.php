@@ -29,6 +29,7 @@
                                     <p><strong>Nik:</strong> {{ $user->userdetail->nik }}</p>
                                     <p><strong>Domisili:</strong> {{ $user->userdetail->domisili }}</p>
                                     <p><strong>Address:</strong> {{ $user->userdetail->address }}</p>
+                                    <p><strong>Directorate:</strong> {{ $user->userdetail->directorate->name }}</p>
                                     <p><strong>Departement:</strong> {{ $user->userdetail->departement->name }}</p>
                                     <p><strong>Position:</strong> {{ $user->userdetail->position }}</p>
                                     <p><strong>Level:</strong> {{ $user->userdetail->level }}</p>

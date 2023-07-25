@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Departement;
+use App\Models\Directorate;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserDetail;
@@ -45,10 +46,11 @@ class UserController extends Controller
     {
         // Ambil data roles dan departements untuk ditampilkan di form
         $roles = Role::all();
+        $directorates = Directorate::all();
         $departements = Departement::all();
         $userDetail = UserDetail::all();
 
-        return view('user.create', compact('roles', 'departements', 'userDetail'));
+        return view('user.create', compact('roles','directorates', 'departements', 'userDetail'));
     }
 
     /**
@@ -83,6 +85,7 @@ class UserController extends Controller
             $userDetail->user_id = $user->id;
             $userDetail->nik = $request->nik;
             $userDetail->domisili = $request->domisili;
+            $userDetail->directorate_id = $request->directorate_id;
             $userDetail->departement_id = $request->departement_id;
             $userDetail->address = $request->address;
             $userDetail->phone = $request->phone;
@@ -151,10 +154,11 @@ class UserController extends Controller
 
         // Fetch all roles and departements for dropdowns
         $roles = Role::all();
+        $directorates = Directorate::all();
         $departements = Departement::all();
 
         // Return the view with user data and dropdown options
-        return view('user.edit', compact('user', 'roles', 'departements'));
+        return view('user.edit', compact('user', 'roles', 'departements','directorates'));
     } catch (\Throwable $th) {
         // Handle database query exception
         return redirect()->route('users.index')->with('error', 'Failed to fetch user data. ' . $th->getMessage());
@@ -201,6 +205,7 @@ class UserController extends Controller
             $userDetail = UserDetail::where('user_id', $id)->firstOrFail();
             $userDetail->nik = $request->nik;
             $userDetail->domisili = $request->domisili;
+            $userDetail->directorate_id = $request->directorate_id;
             $userDetail->departement_id = $request->departement_id;
             $userDetail->address = $request->address;
             $userDetail->phone = $request->phone;
@@ -231,23 +236,23 @@ class UserController extends Controller
             $userDetail->save();
 
             // Redirect to the user profile page with success message
-            return redirect()->route('users.index')->with('success', 'User data has been updated successfully!');
-        } catch (\Throwable $th) {
-            // Handle database query exception
-            return redirect()->back()->withInput()->withErrors(['error' => 'Failed to update user data. ' . $th->getMessage()]);
-        } catch (\Exception $e) {
-            // Handle other general exceptions
-            return redirect()->route('users.index')->with('error', 'An error occurred. Please try again or contact the administrator.');
-        }
+        //     return redirect()->route('users.index')->with('success', 'User data has been updated successfully!');
+        // } catch (\Throwable $th) {
+        //     // Handle database query exception
+        //     return redirect()->back()->withInput()->withErrors(['error' => 'Failed to update user data. ' . $th->getMessage()]);
+        // } catch (\Exception $e) {
+        //     // Handle other general exceptions
+        //     return redirect()->route('users.index')->with('error', 'An error occurred. Please try again or contact the administrator.');
+        // }
 
-    //     return redirect()->route('users.index')->with('success', 'Pengguna berhasil diupdate!');
-    // } catch (QueryException $e) {
-    //         dd($e->getMessage()); // Tampilkan pesan kesalahan query database
-    //         return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
-    //     } catch (\Exception $e) {
-    //         dd($e->getMessage()); // Tampilkan pesan kesalahan umum
-    //         return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
-    //     }
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil diupdate!');
+    } catch (QueryException $e) {
+            dd($e->getMessage()); // Tampilkan pesan kesalahan query database
+            return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
+        } catch (\Exception $e) {
+            dd($e->getMessage()); // Tampilkan pesan kesalahan umum
+            return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
+        }
     }
 
 

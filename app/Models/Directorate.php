@@ -17,4 +17,9 @@ class Directorate extends Model
     {
         return $this->hasMany(Departement::class);
     }
+
+    public function userdetail()
+    {
+        return $this->hasMany(UserDetail::class);
+    }
 }

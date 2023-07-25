@@ -114,6 +114,18 @@
                                             <label for="phone">Phone</label>
                                             <textarea class="form-control" id="phone" rows="5" name="phone">{{ old('phone', $user->userdetail->phone) }}</textarea>
                                         </div>
+                                        {{-- directorate  --}}
+                                        <div class="form-group form-floating-label">
+                                            <label for="directorate_id">Select Directorate</label>
+                                            <select class="form-control input-border-bottom" name="directorate_id"
+                                                id="directorate_id" required>
+                                                @foreach ($directorates as $directorate)
+                                                    <option value="{{ $directorate->id }}"
+                                                        {{ old('directorate', $user->userdetail->directorate_id) == $directorate->id ? 'selected' : '' }}>
+                                                        {{ $directorate->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         {{-- departement  --}}
                                         <div class="form-group form-floating-label">
                                             <label for="departement_id">Select Departement</label>

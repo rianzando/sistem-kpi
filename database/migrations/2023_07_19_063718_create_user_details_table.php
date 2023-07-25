@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('domisili');
             $table->bigInteger('phone')->nullable();
             $table->text('address')->nullable();
-            $table->unsignedInteger('departement_id');
+            $table->unsignedInteger('directorate_id');
+            $table->json('departement_id')->nullable();
             $table->string('position');
             $table->string('level');
             $table->string('location');

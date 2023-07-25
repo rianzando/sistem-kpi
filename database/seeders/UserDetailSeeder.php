@@ -20,6 +20,7 @@ class UserDetailSeeder extends Seeder
             'phone' => '089767571238',
             'domisili' => 'Non-lokal',
             'address' => 'Jl. Pagentongan',
+            'directorate_id' => 1,
             'departement_id' => 1,
             'position' => 'Manager',
             'level' => 'Senior',
