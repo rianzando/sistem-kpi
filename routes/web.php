@@ -48,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/monitoring/create/{kpi_departement_id}', [MonitoringController::class, 'create'])->name('monitoring.create');
 
     Route::get('/dashboard/kpidepartement/chart-data', [DashboardController::class, 'getKpiDepartementChartData']);
+    Route::get('/dashboard/kpidepartementstatus/chart-data', [DashboardController::class, 'getKpiDepartementstatusChartData']);
+    Route::get('/dashboard/kpidirectorate/chart-data', [DashboardController::class, 'getKpiDirectorateChartData']);
 
 });
 

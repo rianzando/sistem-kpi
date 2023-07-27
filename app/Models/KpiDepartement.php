@@ -31,7 +31,7 @@ class kpiDepartement extends Model
 
     public function departement(): BelongsTo
     {
-        return $this->belongsTo(Departement::class)->withDefault();
+        return $this->belongsTo(Departement::class, 'departement_id')->withDefault();
     }
 
 
