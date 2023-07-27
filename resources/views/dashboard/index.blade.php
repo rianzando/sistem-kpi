@@ -74,13 +74,15 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <canvas id="chartdepartement"></canvas>
+                    <div id="container"></div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-    <script src="{{ asset('back/js/dashboard/dashboard-1.js') }}"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="{{ asset('back/js/dashboard/dashboard-1.js') }}"></script> --}}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script>
         // Function to fetch chart data via AJAX
         function getChartData() {
@@ -92,30 +94,41 @@
         async function createChart() {
             const data = await getChartData();
 
-            const ctx = document.getElementById('chartdepartement').getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'bar', // Change this to the desired chart type (e.g., line, bar, pie, etc.)
-                data: {
-                    labels: data.department_names,
-                    datasets: [{
-                        label: 'Achievement',
-                        data: data.achievement,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'bar', // Change this to the desired chart type (e.g., line, bar, pie, etc.)
                 },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
+                title: {
+                    text: 'KPI Departement Achievement',
+                },
+                xAxis: {
+                    categories: data.department_names,
+                },
+                yAxis: {
+                    title: {
+                        text: 'Achievement',
+                    },
+                    min: 0,
+                    max: 100,
+                },
+                series: [{
+                    name: 'Achievement',
+                    data: data.achievement,
+                    color: 'rgba(75, 192, 192, 0.2)',
+                }],
+                // Add exporting options for drilldown
+                exporting: {
+                    buttons: {
+                        contextButton: {
+                            menuItems: ['downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG'],
+                        },
+                    },
+                },
             });
         }
 
         // Call the createChart function to create the chart
         createChart();
     </script>
+
 @endsection
