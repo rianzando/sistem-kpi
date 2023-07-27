@@ -18,7 +18,7 @@ return new class extends Migration
             $table->dateTime('end_date')->nullable();
             $table->text('current_progress')->nullable();
             $table->text('follow_up')->nullable();
-            $table->integer('achivement')->default(0);
+            $table->integer('achievement')->default(0);
             $table->string('status')->default('Open');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('updated')->nullable();

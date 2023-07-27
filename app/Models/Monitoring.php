@@ -17,7 +17,7 @@ class Monitoring extends Model
         'end_date',
         'current_progress',
         'follow_up',
-        'achivement',
+        'achievement',
         'status',
         'user_id',
         'updated',

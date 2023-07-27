@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KpiCorporate extends Model
@@ -43,5 +44,15 @@ class KpiCorporate extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all of the kpidirectorates for the KpiCorporate.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function kpidirectorates(): HasMany
+    {
+        return $this->hasMany(KpiDirectorate::class, 'kpi_corporate_id');
     }
 }

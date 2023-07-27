@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('kpi_directorates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('kpi_directorate_id');
+            $table->unsignedBigInteger('kpi_corporate_id');
             $table->unsignedBigInteger('directorate_id');
             $table->string('kpi_directorate');
             $table->string('target');

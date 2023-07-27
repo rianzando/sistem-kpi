@@ -25,9 +25,9 @@
             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                         class="icon icon-app-store"></i><span class="nav-text">KPI</span></a>
                 <ul aria-expanded="false">
-                    <li><a href="{{ route('corporates.index') }}">KPI Corporate</a></li>
-                    <li><a href="./app-calender.html">KPI Directorate</a></li>
-                    <li><a href="./app-calender.html">KPI Departement</a></li>
+                    <li><a href="{{ route('corporates.index') }}">Corporate</a></li>
+                    <li><a href="{{ route('kpidirectorate.index') }}">Directorate</a></li>
+                    <li><a href="{{ route('kpidepartement.index') }}">Departement</a></li>
                 </ul>
             </li>
             <li class="nav-label">User</li>

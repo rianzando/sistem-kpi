@@ -142,15 +142,17 @@
                                                 </select>
                                             </div>
                                             {{-- departement  --}}
-                                            <div class="form-group form-floating-label">
-                                                <label for="departement_id">Select Departement</label>
-                                                <select class="form-control input-border-bottom" name="departement_id"
-                                                    id="departement_id" required>
-                                                    @foreach ($departements as $departement)
-                                                        <option value="{{ $departement->id }}">{{ $departement->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="form-group">
+                                                <label for="departement_id">Departments</label><br>
+                                                @foreach ($departements as $departement)
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="departement_id[]" value="{{ $departement->id }}"
+                                                            id="departement{{ $departement->id }}">
+                                                        <label class="form-check-label"
+                                                            for="departement{{ $departement->id }}">{{ $departement->name }}</label>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                             {{-- position --}}
                                             <div class="form-group form-floating-label">

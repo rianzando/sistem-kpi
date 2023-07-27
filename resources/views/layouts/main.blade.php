@@ -185,7 +185,7 @@
     <script src="{{ asset('back/vendor/jquery.counterup/jquery.counterup.min.js') }}"></script>
 
 
-    <script src="{{ asset('back/js/dashboard/dashboard-1.js') }}"></script>
+
 
     {{-- sweetalert  --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
@@ -197,6 +197,7 @@
         })
     </script>
 
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.2/chart.min.js"></script> --}}
 </body>
 
 </html>

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class KpiDepartmentSeeder extends Seeder
+class KpiDepartementSeeder extends Seeder
 {
     /**
      * Run the database seeds.

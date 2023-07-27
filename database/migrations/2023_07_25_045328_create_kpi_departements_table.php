@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('kpi_directorate_id');
             $table->unsignedBigInteger('departement_id');
-            $table->string('framework');
-            $table->string('kpi_departement');
-            $table->string('target_departement')->nullable();
+            $table->text('framework');
+            $table->text('kpi_departement');
+            $table->text('target_departement')->nullable();
             $table->year('year');
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
-            $table->integer('achievement')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('achievement')->nullable()->default(0);
+            $table->string('status')->nullable()->default('Open');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('updated')->nullable();
             $table->unsignedBigInteger('deleted')->nullable();
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kpi_departments');
+        Schema::dropIfExists('kpi_departements');
     }
 };

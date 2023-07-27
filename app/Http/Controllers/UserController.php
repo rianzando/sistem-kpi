@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -59,16 +59,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validasi input dari form
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
                 'role_id' => 'required|exists:roles,id',
-                'departement_id' => 'required|exists:departements,id',
+                'departement_id' => 'required|array', // Use array validation rule
+                'departement_id.*' => 'exists:departements,id', // Validate each element in the array
                 'image' => 'nullable|image|mimes:png,jpg,jpeg|max:10048',
                 // Add more validation rules for other fields in the form
             ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
             // Simpan data pengguna baru ke dalam tabel users
             $user = new User();
@@ -76,9 +80,7 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->role_id = $request->role_id;
-
             $user->save();
-            // dd($request->all());
 
             // Simpan data user_detail baru ke dalam tabel user_details
             $userDetail = new UserDetail();
@@ -86,7 +88,6 @@ class UserController extends Controller
             $userDetail->nik = $request->nik;
             $userDetail->domisili = $request->domisili;
             $userDetail->directorate_id = $request->directorate_id;
-            $userDetail->departement_id = $request->departement_id;
             $userDetail->address = $request->address;
             $userDetail->phone = $request->phone;
             $userDetail->position = $request->position;
@@ -109,23 +110,20 @@ class UserController extends Controller
 
             $userDetail->save();
 
+            // Associate the user with the selected departments (many-to-many relationship)
+            $user->departements()->attach($request->departement_id);
+
             // Redirect ke halaman index pengguna dengan pesan sukses
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
-            // } catch (QueryException $e) {
-            //     dd($e->getMessage()); // Tampilkan pesan kesalahan query database
-            //     return redirect()->route('users.create')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
-            // } catch (\Exception $e) {
-            //     dd($e->getMessage()); // Tampilkan pesan kesalahan umum
-            //     return redirect()->route('users.create')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
-            // }
-        }  catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             // Tangkap exception jika ada masalah dengan query database
             return redirect()->back()->withInput()->withErrors(['error' => 'Gagal menyimpan data User. ' . $th->getMessage()]);
-        }  catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             // Tangkap exception umum jika ada kesalahan lainnya
             return redirect()->route('users.create')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
         }
     }
+
 
 
 

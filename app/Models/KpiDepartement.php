@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
-class KpiDepartment extends Model
+class kpiDepartement extends Model
 {
     use HasFactory,SoftDeletes;
 
@@ -20,11 +21,11 @@ class KpiDepartment extends Model
         'year',
         'start_date',
         'end_date',
-        'achievement',
-        'status',
         'user_id',
         'updated',
         'deleted',
+        'achievement',
+        'status'
     ];
 
 
@@ -42,6 +43,12 @@ class KpiDepartment extends Model
 
     public function kpidirectorate(): BelongsTo
     {
-        return $this->belongsTo(KpiDirectorate::class)->withDefault();
+        return $this->belongsTo(KpiDirectorate::class,'kpi_directorate_id');
     }
+
+    public function monitorings()
+    {
+    return $this->hasMany(Monitoring::class);
+    }
+
 }

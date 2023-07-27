@@ -32,6 +32,11 @@ class UserDetail extends Model
         'image',
     ];
 
+
+    protected $casts = [
+        'departement_id' => 'array',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
