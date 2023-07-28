@@ -23,9 +23,22 @@ class DashboardController extends Controller
             $countkpicorporate = KpiCorporate::count();
             $countkpidirectorate = KpiDirectorate::count();
             $countkpidepartement= kpiDepartement::count();
+            $kpidepartements = kpiDepartement::query()->latest('achievement')->paginate(5);
+            $countdone = kpiDepartement::where('status', 'Done')->count();
+            $countprogress = kpiDepartement::where('status', 'On Progress')->count();
+            $countopen = kpiDepartement::where('status', 'Open')->count();
 
-            // Load the dashboard view and pass the authenticated user data
-            return view('dashboard.index', compact('user', 'usercount', 'countkpicorporate','countkpidirectorate','countkpidepartement'));
+            return view('dashboard.index', compact(
+                'user',
+                'usercount',
+                'countkpicorporate',
+                'countkpidirectorate',
+                'countkpidepartement',
+                'kpidepartements',
+                'countdone',
+                'countprogress',
+                'countopen'
+            ));
         }
     }
 

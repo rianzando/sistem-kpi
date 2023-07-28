@@ -2,7 +2,7 @@
 @section('title', 'dashboard')
 @section('content')
     <div class="content-body">
-        < class="container-fluid">
+        <div class="container-fluid">
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
@@ -23,7 +23,7 @@
                     <div class="card">
                         <div class="stat-widget-one card-body">
                             <div class="stat-icon d-inline-block">
-                                <i class="ti-user text-primary border-primary"></i>
+                                <i class="ti-user text-pink border-pink"></i>
                             </div>
                             <div class="stat-content d-inline-block">
                                 <div class="stat-text">User</div>
@@ -74,6 +74,47 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card">
+                        <div class="stat-widget-one card-body">
+                            <div class="stat-icon d-inline-block">
+                                <i class="fas fa-thumbs-up text-pink border-pink"></i>
+                            </div>
+                            <div class="stat-content d-inline-block">
+                                <div class="stat-text">Done</div>
+                                <div class="stat-digit">{{ $countdone }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card">
+                        <div class="stat-widget-one card-body">
+                            <div class="stat-icon d-inline-block">
+                                <i class="fas fa-sync text-pink border-pink"></i>
+                            </div>
+                            <div class="stat-content d-inline-block">
+                                <div class="stat-text">On Progress</div>
+                                <div class="stat-digit">{{ $countprogress }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card">
+                        <div class="stat-widget-one card-body">
+                            <div class="stat-icon d-inline-block">
+                                <i class="fas fa-lock-open text-pink border-pink"></i>
+                            </div>
+                            <div class="stat-content d-inline-block">
+                                <div class="stat-text">Open</div>
+                                <div class="stat-digit">{{ $countopen }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div id="container"></div>
                 </div>
@@ -81,17 +122,61 @@
                     <div id="container2"></div>
                 </div>
             </div>
-
-            <div class="col-12">
-                <div id="container3" width="400" height="200" class="mt-5"></div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div id="container3"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h5 class="pb-3">5 Last Data Achivement Departement</h5>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-responsive-sm" height="300">
+                                    <thead>
+                                        <tr>
+                                            <th>Departement</th>
+                                            <th>KPI Departement</th>
+                                            <th>Achievement</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach ($kpidepartements as $kpidepartement)
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ $kpidepartement->departement->name }}</td>
+                                                <td>{{ $kpidepartement->kpi_departement }}</td>
+                                                <td>{{ $kpidepartement->achievement }}</td>
+                                                <td>
+                                                    @if ($kpidepartement->status == 'Open')
+                                                        <span class="badge badge-warning">Open</span>
+                                                    @elseif ($kpidepartement->status == 'On Progress')
+                                                        <span class="badge badge-primary">On Progress</span>
+                                                    @else
+                                                        <span class="badge badge-success">Done</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-    </div>
+        </div>
     </div>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="{{ asset('back/js/dashboard/dashboard-1.js') }}"></script> --}}
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/cylinder.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script>
         // Function to fetch chart data via AJAX
         function getChartData() {
@@ -99,13 +184,28 @@
                 .then(response => response.json());
         }
 
+        // Function to generate random colors
+        function getRandomColor() {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16);
+        }
+
         // Function to create and update the chart
         async function createChart() {
             const data = await getChartData();
 
+            // Generate random colors for each data point in the series
+            const colors = data.achievement.map(() => getRandomColor());
+
             Highcharts.chart('container', {
                 chart: {
-                    type: 'bar', // Change this to the desired chart type (e.g., line, bar, pie, etc.)
+                    type: 'cylinder',
+                    options3d: {
+                        enabled: true,
+                        alpha: 15,
+                        beta: 15,
+                        depth: 50,
+                        viewDistance: 25
+                    }
                 },
                 title: {
                     text: 'KPI Departement Achievement',
@@ -120,10 +220,21 @@
                     min: 0,
                     max: 100,
                 },
+                plotOptions: {
+                    cylinder: {
+                        dataLabels: {
+                            enabled: true, // Enable data labels on the bars
+                            format: '{y}%', // Format the data labels to show the achievement percentage
+                        },
+                        colorByPoint: true, // Enable different colors for each data point
+                    }
+                },
                 series: [{
                     name: 'Achievement',
-                    data: data.achievement,
-                    color: 'rgba(75, 192, 192, 0.2)',
+                    data: data.achievement.map((value, index) => ({
+                        y: value,
+                        color: colors[index], // Set random color for each data point
+                    })),
                 }],
                 // Add exporting options for drilldown
                 exporting: {
@@ -139,6 +250,10 @@
         // Call the createChart function to create the chart
         createChart();
     </script>
+
+
+
+
 
 
     <script>
@@ -172,7 +287,7 @@
                 series: [{
                     name: 'Achievement',
                     data: data.achievement,
-                    color: 'grey',
+                    color: '#BBE83B',
                 }],
                 // Add exporting options for drilldown
                 exporting: {
@@ -220,6 +335,7 @@
                 series: [{
                     name: 'Open',
                     data: data.status_counts.map(counts => counts['Open']),
+                    color: '#BBE83B',
                 }, {
                     name: 'On Progress',
                     data: data.status_counts.map(counts => counts['On Progress']),
