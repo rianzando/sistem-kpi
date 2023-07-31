@@ -25,20 +25,20 @@ class KpiCorporate extends Model
     ];
 
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        self::saving(function ($corporate) {
-            if ($corporate->achievement < 40) {
-                $corporate->status = 'Open';
-            } elseif ($corporate->achievement < 100) {
-                $corporate->status = 'On Progress';
-            } else {
-                $corporate->status = 'Done';
-            }
-        });
-    }
+    //     self::saving(function ($corporate) {
+    //         if ($corporate->achievement < 40) {
+    //             $corporate->status = 'Open';
+    //         } elseif ($corporate->achievement < 100) {
+    //             $corporate->status = 'On Progress';
+    //         } else {
+    //             $corporate->status = 'Done';
+    //         }
+    //     });
+    // }
 
     // Define the relationship with the User model
     public function user()

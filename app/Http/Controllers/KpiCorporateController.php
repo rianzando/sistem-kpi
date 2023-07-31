@@ -53,7 +53,7 @@ class KpiCorporateController extends Controller
             'target_corporate' => 'nullable|string',
             'bobot' => 'required|numeric',
             'year' => 'required|integer|between:1900,' . (date('Y') + 50),
-            'achievement' => 'required|numeric',
+
         ]);
 
         // Simpan data ke database
@@ -64,27 +64,13 @@ class KpiCorporateController extends Controller
         $corporate->target_corporate = $request->input('target_corporate');
         $corporate->bobot = $request->input('bobot');
         $corporate->year = $request->input('year');
-        $corporate->achievement = $request->input('achievement');
-        $corporate->status = $this->calculateStatus($request->input('achievement'));
         $corporate->save();
 
         // Redirect ke halaman yang diinginkan (misalnya halaman index)
         return redirect()->route('corporates.index')->with('success', 'Corporate data has been saved successfully.');
     }
 
-    // Fungsi untuk menghitung nilai status berdasarkan achievement
-    private function calculateStatus($achievement)
-    {
-        if ($achievement < 40) {
-            return 'Open';
-        } elseif ($achievement < 100) {
-            return 'On Progress';
-        } else {
-            return 'Done';
-        }
-    }
-
-    /**
+     /**
      * Display the specified resource.
      */
     public function show($id)
@@ -122,7 +108,7 @@ class KpiCorporateController extends Controller
             'target_corporate' => 'nullable|string',
             'bobot' => 'required|numeric',
             'year' => 'required|integer|between:1900,' . (date('Y') + 50),
-            'achievement' => 'required|numeric',
+
         ]);
 
         // Cari data KpiCorporate berdasarkan ID
@@ -134,8 +120,6 @@ class KpiCorporateController extends Controller
         $corporate->target_corporate = $request->input('target_corporate');
         $corporate->bobot = $request->input('bobot');
         $corporate->year = $request->input('year');
-        $corporate->achievement = $request->input('achievement');
-        $corporate->status = $this->calculateStatus($request->input('achievement'));
         $corporate->updated = Auth::id();
         $corporate->save();
 

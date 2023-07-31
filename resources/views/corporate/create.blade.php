@@ -50,8 +50,7 @@
                                             {{-- Goals  --}}
                                             <div class="form-group">
                                                 <label for="goals">Goals</label>
-                                                <input type="text" class="form-control" id="goals" name="goals"
-                                                    placeholder="Enter Goals" required>
+                                                <textarea class="form-control" id="goals" name="goals" required></textarea>
                                             </div>
                                         </div>
 
@@ -59,8 +58,7 @@
                                             {{-- KPI Corporate  --}}
                                             <div class="form-group form-floating-label">
                                                 <label for="kpi_corporate">KPI Corporate</label>
-                                                <input id="kpi_corporate" type="text"
-                                                    class="form-control input-border-bottom" name="kpi_corporate" required>
+                                                <textarea id="kpi_corporate" class="form-control input-border-bottom" name="kpi_corporate" required></textarea>
                                             </div>
 
 
@@ -96,11 +94,11 @@
                                             </div>
 
                                             {{-- achievement  --}}
-                                            <div class="form-group form-floating-label">
+                                            {{-- <div class="form-group form-floating-label">
                                                 <label for="achievement">Achievement</label>
                                                 <input id="achievement" type="number"
                                                     class="form-control input-border-bottom" name="achievement" required>
-                                            </div>
+                                            </div> --}}
 
                                         </div>
                                     </div>

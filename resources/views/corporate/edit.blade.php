@@ -76,11 +76,11 @@
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="achievement">Achievement</label>
                                     <input type="number" class="form-control" id="achievement" name="achievement"
                                         value="{{ old('achievement', $corporate->achievement) }}" required>
-                                </div>
+                                </div> --}}
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>
