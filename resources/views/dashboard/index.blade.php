@@ -115,19 +115,31 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <label for="departmentDropdown">Select Department:</label>
+                    <select id="departmentDropdown">
+                        <option value="all">All Departments</option>
+                        @foreach ($departements as $departement)
+                            <option value="{{ $departement->id }}">{{ $departement->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div id="container"></div>
                 </div>
                 <div class="col-md-6">
-                    <div id="container2"></div>
+                    <div id="container3"></div>
                 </div>
             </div>
             <div class="row mt-4">
                 <div class="col-md-6">
-                    <div id="container3"></div>
+                    <div id="container2"></div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card">
+                    <div id="container4"></div>
+                    {{-- <div class="card">
                         <div class="card-body">
                             <div class="card-title">
                                 <h5 class="pb-3">5 Last Data Achivement Departement</h5>
@@ -163,7 +175,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -178,10 +190,13 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script>
-        // Function to fetch chart data via AJAX
-        function getChartData() {
-            return fetch('http://127.0.0.1:8000/dashboard/kpidepartement/chart-data')
-                .then(response => response.json());
+        // Function to fetch chart data via AJAX with a department filter
+        async function getChartDataWithFilter(endpoint, department) {
+            const url = department === 'all' ?
+                endpoint :
+                `${endpoint}?department=${encodeURIComponent(department)}`;
+            const response = await fetch(url);
+            return response.json();
         }
 
         // Function to generate random colors
@@ -189,16 +204,29 @@
             return '#' + Math.floor(Math.random() * 16777215).toString(16);
         }
 
-        // Function to create and update the chart
-        async function createChart() {
-            const data = await getChartData();
+        // Global variables to store Highcharts objects
+        let achievementChart;
+        let statusChart;
+
+        // Function to create and update the achievement chart
+        async function createAchievementChart(selectedDepartment) {
+            const endpoint = 'http://127.0.0.1:8000/dashboard/kpidepartement/chart-data';
+            const data = await getChartDataWithFilter(endpoint, selectedDepartment);
+            console.log("Selected Department:", selectedDepartment);
+
+            console.log("Achievement Chart Data:", data); // Add this line to check the data
 
             // Generate random colors for each data point in the series
             const colors = data.achievement.map(() => getRandomColor());
 
-            Highcharts.chart('container', {
+            // Destroy the existing chart if it exists
+            if (achievementChart) {
+                achievementChart.destroy();
+            }
+
+            achievementChart = Highcharts.chart('container', {
                 chart: {
-                    type: 'cylinder',
+                    type: 'bar',
                     options3d: {
                         enabled: true,
                         alpha: 15,
@@ -223,20 +251,19 @@
                 plotOptions: {
                     cylinder: {
                         dataLabels: {
-                            enabled: true, // Enable data labels on the bars
-                            format: '{y}%', // Format the data labels to show the achievement percentage
+                            enabled: true,
+                            format: '{y}%',
                         },
-                        colorByPoint: true, // Enable different colors for each data point
+                        colorByPoint: true,
                     }
                 },
                 series: [{
                     name: 'Achievement',
                     data: data.achievement.map((value, index) => ({
                         y: value,
-                        color: colors[index], // Set random color for each data point
+                        color: colors[index],
                     })),
                 }],
-                // Add exporting options for drilldown
                 exporting: {
                     buttons: {
                         contextButton: {
@@ -247,8 +274,63 @@
             });
         }
 
-        // Call the createChart function to create the chart
-        createChart();
+        // Function to create and update the status chart
+        async function createStatusChart(selectedDepartment) {
+            const endpoint = '/dashboard/kpidepartementstatus/chart-data';
+            const data = await getChartDataWithFilter(endpoint, selectedDepartment);
+            console.log("Status Chart Data:", data); // Add this line to check the data
+
+            // Destroy the existing chart if it exists
+            if (statusChart) {
+                statusChart.destroy();
+            }
+
+            statusChart = Highcharts.chart('container3', {
+                chart: {
+                    type: 'column',
+                },
+                title: {
+                    text: 'KPI Departement Status',
+                },
+                xAxis: {
+                    categories: data.department_names,
+                },
+                yAxis: {
+                    title: {
+                        text: 'Status Count',
+                    },
+                },
+                series: [{
+                    name: 'Open',
+                    data: data.status_counts.map(counts => counts['Open']),
+                    color: '#BBE83B',
+                }, {
+                    name: 'On Progress',
+                    data: data.status_counts.map(counts => counts['On Progress']),
+                }, {
+                    name: 'Done',
+                    data: data.status_counts.map(counts => counts['Done']),
+                }],
+                exporting: {
+                    buttons: {
+                        contextButton: {
+                            menuItems: ['downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG'],
+                        },
+                    },
+                },
+            });
+        }
+
+        // Event listener for the department dropdown change
+        document.getElementById('departmentDropdown').addEventListener('change', () => {
+            const selectedDepartment = document.getElementById('departmentDropdown').value;
+            createAchievementChart(selectedDepartment);
+            createStatusChart(selectedDepartment);
+        });
+
+        // Call the initial chart creation functions to load the charts with "All Departments" data
+        createAchievementChart('all');
+        createStatusChart('all');
     </script>
 
 
@@ -256,6 +338,7 @@
 
 
 
+    {{-- grafik directorate  --}}
     <script>
         // Function to fetch chart data via AJAX
         function getChartData() {
@@ -269,7 +352,14 @@
 
             Highcharts.chart('container2', {
                 chart: {
-                    type: 'bar', // Change this to the desired chart type (e.g., line, bar, pie, etc.)
+                    type: 'bar',
+                    options3d: {
+                        enabled: true,
+                        alpha: 15,
+                        beta: 15,
+                        depth: 50,
+                        viewDistance: 25
+                    } // Change this to the desired chart type (e.g., line, bar, pie, etc.)
                 },
                 title: {
                     text: 'KPI Directorate Achievement',
@@ -303,29 +393,26 @@
         // Call the createChart function to create the chart
         createChart();
     </script>
-
-
-    {{-- departement kpi by status  --}}
+    <!-- Script to fetch chart data via AJAX -->
     <script>
-        // Function to fetch chart data via AJAX
-        function getChartData() {
-            return fetch('/dashboard/kpidepartementstatus/chart-data')
+        function getStatusChartData() {
+            return fetch('http://127.0.0.1:8000/dashboard/kpidirectoratestatus/chart-data')
                 .then(response => response.json());
         }
 
-        // Function to create and update the chart
-        async function createChart() {
-            const data = await getChartData();
+        // Function to create and update the status chart
+        async function createStatusChart() {
+            const data = await getStatusChartData();
 
-            Highcharts.chart('container3', {
+            Highcharts.chart('container4', {
                 chart: {
-                    type: 'column',
+                    type: 'column', // Change the chart type to 'column'
                 },
                 title: {
-                    text: 'KPI Departement Status',
+                    text: 'KPI Directorate Status',
                 },
                 xAxis: {
-                    categories: data.department_names,
+                    categories: data.directorate_names,
                 },
                 yAxis: {
                     title: {
@@ -335,15 +422,16 @@
                 series: [{
                     name: 'Open',
                     data: data.status_counts.map(counts => counts['Open']),
-                    color: '#BBE83B',
+                    color: '#FF0000', // You can customize the color for each status if needed
                 }, {
                     name: 'On Progress',
                     data: data.status_counts.map(counts => counts['On Progress']),
+                    color: '#00FF00',
                 }, {
                     name: 'Done',
                     data: data.status_counts.map(counts => counts['Done']),
+                    color: '#0000FF',
                 }],
-                // Add exporting options for drilldown
                 exporting: {
                     buttons: {
                         contextButton: {
@@ -354,7 +442,7 @@
             });
         }
 
-        // Call the createChart function to create the chart
-        createChart();
+        // Call the createStatusChart function to create the status chart
+        createStatusChart();
     </script>
 @endsection

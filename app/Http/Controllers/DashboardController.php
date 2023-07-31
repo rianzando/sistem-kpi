@@ -27,6 +27,7 @@ class DashboardController extends Controller
             $countdone = kpiDepartement::where('status', 'Done')->count();
             $countprogress = kpiDepartement::where('status', 'On Progress')->count();
             $countopen = kpiDepartement::where('status', 'Open')->count();
+            $departements = Departement::all();
 
             return view('dashboard.index', compact(
                 'user',
@@ -37,7 +38,8 @@ class DashboardController extends Controller
                 'kpidepartements',
                 'countdone',
                 'countprogress',
-                'countopen'
+                'countopen',
+                'departements'
             ));
         }
     }
@@ -72,38 +74,6 @@ class DashboardController extends Controller
 
         return response()->json($data);
     }
-
-
-    public function getKpiDirectorateChartData()
-    {
-        // Get all departments
-        $directorates = Directorate::all();
-
-        // Initialize arrays to store department names and achievements
-        $directorateNames = [];
-        $achievement = [];
-
-        // Loop through each department and calculate the average achievement
-        foreach ($directorates as $directorate) {
-            $averageAchievement = KpiDirectorate::where('directorate_id', $directorate->id)->avg('achievement');
-            // Round the average achievement to 2 decimal places (you can adjust this as needed)
-            $averageAchievement = round($averageAchievement, 2);
-
-            // Add the department name and achievement to the respective arrays
-            $directorateNames[] = $directorate->name;
-            $achievement[] = $averageAchievement;
-        }
-
-        $data = [
-            'directorate_names' => $directorateNames,
-            'achievement' => $achievement,
-        ];
-
-        // dd($data);
-
-        return response()->json($data);
-    }
-
 
 
     // kpidepartement berdasarkan status
@@ -144,5 +114,75 @@ class DashboardController extends Controller
 
     return response()->json($data);
 }
+
+
+public function getKpiDirectorateChartData()
+{
+    // Get all departments
+    $directorates = Directorate::all();
+
+    // Initialize arrays to store department names and achievements
+    $directorateNames = [];
+    $achievement = [];
+
+    // Loop through each department and calculate the average achievement
+    foreach ($directorates as $directorate) {
+        $averageAchievement = KpiDirectorate::where('directorate_id', $directorate->id)->avg('achievement');
+        // Round the average achievement to 2 decimal places (you can adjust this as needed)
+        $averageAchievement = round($averageAchievement, 2);
+
+        // Add the department name and achievement to the respective arrays
+        $directorateNames[] = $directorate->name;
+        $achievement[] = $averageAchievement;
+    }
+
+    $data = [
+        'directorate_names' => $directorateNames,
+        'achievement' => $achievement,
+    ];
+
+    // dd($data);
+
+    return response()->json($data);
+}
+
+public function getKpiDirectorateStatusChartData()
+{
+    // Get all KPI Directorates with their respective directorate names and statuses
+    $kpis = KpiDirectorate::with('directorate')->get();
+
+    // Initialize an associative array to store status counts for each directorate
+    $statusCountsByDirectorate = [];
+
+    // Loop through each KPI Directorate and calculate the status counts
+    foreach ($kpis as $kpi) {
+        $directorateName = $kpi->directorate->name;
+        $status = $kpi->status;
+
+        // If the directorate does not exist in the $statusCountsByDirectorate array, initialize it
+        if (!isset($statusCountsByDirectorate[$directorateName])) {
+            $statusCountsByDirectorate[$directorateName] = [
+                'Open' => 0,
+                'On Progress' => 0,
+                'Done' => 0,
+            ];
+        }
+
+        // Increment the corresponding status count for the directorate
+        $statusCountsByDirectorate[$directorateName][$status]++;
+    }
+
+    // Extract the directorate names and status counts from the associative array
+    $directorateNames = array_keys($statusCountsByDirectorate);
+    $statusCounts = array_values($statusCountsByDirectorate);
+
+    $data = [
+        'directorate_names' => $directorateNames,
+        'status_counts' => $statusCounts,
+    ];
+
+    return response()->json($data);
+}
+
 
 }

@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/kpidepartement/chart-data', [DashboardController::class, 'getKpiDepartementChartData']);
     Route::get('/dashboard/kpidepartementstatus/chart-data', [DashboardController::class, 'getKpiDepartementstatusChartData']);
     Route::get('/dashboard/kpidirectorate/chart-data', [DashboardController::class, 'getKpiDirectorateChartData']);
+    Route::get('/dashboard/kpidirectoratestatus/chart-data', [DashboardController::class, 'getKpiDirectorateStatusChartData']);
 
 });
 
