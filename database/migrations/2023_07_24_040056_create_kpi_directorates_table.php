@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('kpi_corporate_id');
             $table->unsignedBigInteger('directorate_id');
-            $table->string('kpi_directorate');
-            $table->string('target');
+            $table->text('kpi_directorate');
+            $table->text('target');
             $table->text('description')->nullable();
             $table->year('year');
-            $table->integer('achievement');
-            $table->string('status');
+            $table->integer('achievement')->default('0');
+            $table->string('status')->default('Open');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('updated')->nullable();
             $table->unsignedBigInteger('deleted')->nullable();

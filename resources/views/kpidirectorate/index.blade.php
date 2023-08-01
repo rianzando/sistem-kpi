@@ -117,20 +117,22 @@
                                                     <a href="{{ route('kpidirectorate.edit', $kpidirectorate->id) }}"
                                                         class="btn btn-sm btn-warning" data-toggle="tooltip"
                                                         data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                                    <form
+                                                    <form class="d-inline" method="post"
                                                         action="{{ route('kpidirectorate.destroy', $kpidirectorate->id) }}"
-                                                        method="POST" class="d-inline" id="deleteForm">
+                                                        data-user="{{ $kpidirectorate->id }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm delete-btn"
-                                                            data-toggle="tooltip" data-placement="top" title="Delete"><i
-                                                                class="fa fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-danger delete-btn"
+                                                            data-toggle="tooltip" data-placement="top" title="Delete">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+                                {{ $kpidirectorates->links() }}
                             </div>
                         </div>
                     </div>
@@ -139,27 +141,32 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add a click event listener to the delete button
-            const deleteButton = document.querySelector('.delete-btn');
-            deleteButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                const form = document.getElementById('deleteForm');
+        // Function to show the SweetAlert confirmation dialog
+        function showDeleteConfirmation(form) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to delete this KPI Directorate data. This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user clicks 'Yes', submit the form
+                    form.submit();
+                }
+            });
+        }
 
-                // Show SweetAlert confirmation dialog
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!',
-                }).then((result) => {
-                    // If user clicks "Yes", submit the form for deletion
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
+        // Add an event listener to the delete buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach((button) => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('form');
+                    showDeleteConfirmation(form);
                 });
             });
         });

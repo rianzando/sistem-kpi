@@ -1,17 +1,17 @@
 <!-- resources/views/kpi_departements/create.blade.php -->
 @extends('layouts.main')
-@section('title', 'Create KPI Departement')
+@section('title', 'Create KPI Directorate')
 @section('content')
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
-                    <h4 class="page-title">Create KPI Departement</h4>
+                    <h4 class="page-title">Create KPI Directorate</h4>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">KPI Departements</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('kpidepartement.index') }}">Index</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('kpidirectorate.index') }}">Index</a></li>
                         <li class="breadcrumb-item active"><a href="javascript:void(0)">Create</a></li>
                     </ol>
                 </div>
@@ -20,56 +20,67 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="card-body">
+                            {{ $errors }}
                             <div class="basic-form">
-                                <form action="{{ route('kpidepartement.store') }}" method="POST">
+                                <form action="{{ route('kpidirectorate.store') }}" method="POST">
                                     @csrf
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
-                                            <label for="kpi_directorate_id">KPI Directorate</label>
-                                            <select class="form-control" id="kpi_directorate_id" name="kpi_directorate_id"
+                                            <label for="kpi_corporate_id">KPI Corporate</label>
+                                            <select class="form-control" id="kpi_corporate_id" name="kpi_corporate_id"
                                                 required>
-                                                <option value="" selected disabled>Select KPI Directorate</option>
-                                                @foreach ($kpidirectorates as $kpidirectorate)
-                                                    <option value="{{ $kpidirectorate->id }}">
-                                                        {{ $kpidirectorate->kpi_directorate }}</option>
+                                                <option value="" selected disabled>Select Target KPI Corporate
+                                                </option>
+                                                @foreach ($kpicorporates as $kpicorporate)
+                                                    <option value="{{ $kpicorporate->id }}">
+                                                        {{ $kpicorporate->target_corporate }}</option>
                                                 @endforeach
                                             </select>
-                                            @error('kpi_directorate_id')
+                                            @error('kpi_corporate_id')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="departement_id">Departement</label>
-                                            <select class="form-control" id="departement_id" name="departement_id" required>
-                                                <option value="" selected disabled>Select KPI Departement</option>
-                                                @foreach ($departements as $departement)
-                                                    <option value="{{ $departement->id }}">{{ $departement->name }}</option>
+                                            <label for="directorate_id">Directorate</label>
+                                            <select class="form-control" id="directorate_id" name="directorate_id" required>
+                                                <option value="" selected disabled>Select Directorate</option>
+                                                @foreach ($directorates as $directorate)
+                                                    <option value="{{ $directorate->id }}">{{ $directorate->name }}</option>
                                                 @endforeach
                                             </select>
-                                            @error('departement_id')
+                                            @error('directorate_id')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
 
                                         <div class="form-group col-md-12">
-                                            <label for="framework">Framework</label>
-                                            <textarea class="form-control" id="framework" name="framework" required></textarea>
-                                            @error('framework')
+                                            <label for="kpi_directorate">KPI Directorate</label>
+                                            <textarea class="form-control" id="kpi_directorate" name="kpi_directorate" required></textarea>
+                                            @error('kpi_directorate')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label for="kpi_departement">KPI Departement</label>
-                                            <textarea class="form-control" id="kpi_departement" name="kpi_departement" required></textarea>
-                                            @error('kpi_departement')
+                                            <label for="target">Target</label>
+                                            <textarea class="form-control" id="target" name="target" required></textarea>
+                                            @error('target')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label for="target_departement">Target Departement</label>
-                                            <textarea cols="3" class="form-control" id="target_departement" name="target_departement"></textarea>
-                                            @error('target_departement')
+                                            <label for="description">Description</label>
+                                            <textarea cols="3" class="form-control" id="description" name="description"></textarea>
+                                            @error('description')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -87,20 +98,6 @@
                                                 @endfor
                                             </select>
                                             @error('year')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="start_date">Start Date</label>
-                                            <input type="date" class="form-control" id="start_date" name="start_date">
-                                            @error('start_date')
-                                                <div class="text-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="end_date">End Date</label>
-                                            <input type="date" class="form-control" id="end_date" name="end_date">
-                                            @error('end_date')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
                                         </div>

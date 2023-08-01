@@ -56,30 +56,30 @@ class KpiDirectorate extends Model
     }
 
 
-     // Method to calculate average achievement for the given kpi_directorate_id
-     public function calculateAverageAchievement()
-     {
-         // Calculate average achievement from KpiDepartement with the same kpi_directorate_id
-         $averageAchievement = KpiDepartement::where('kpi_directorate_id', $this->kpi_directorate_id)
-             ->avg('achievement');
+    //  // Method to calculate average achievement for the given kpi_directorate_id
+    //  public function calculateAverageAchievement()
+    //  {
+    //      // Calculate average achievement from KpiDepartement with the same kpi_directorate_id
+    //      $averageAchievement = KpiDepartement::where('kpi_directorate_id', $this->kpi_directorate_id)
+    //          ->avg('achievement');
 
-         return $averageAchievement ?? 0;
-     }
+    //      return $averageAchievement ?? 0;
+    //  }
 
-     // Mutator to update 'achievement' and 'status' based on average achievement
-     public function setAchievementAttribute($value)
-     {
-         $this->attributes['achievement'] = $value;
+    //  // Mutator to update 'achievement' and 'status' based on average achievement
+    //  public function setAchievementAttribute($value)
+    //  {
+    //      $this->attributes['achievement'] = $value;
 
-         // Update 'status' based on 'achievement'
-         if ($value < 40) {
-             $this->attributes['status'] = 'Open';
-         } elseif ($value >= 40 && $value <= 99) {
-             $this->attributes['status'] = 'On Progress';
-         } else {
-             $this->attributes['status'] = 'Done';
-         }
-     }
+    //      // Update 'status' based on 'achievement'
+    //      if ($value < 40) {
+    //          $this->attributes['status'] = 'Open';
+    //      } elseif ($value >= 40 && $value <= 99) {
+    //          $this->attributes['status'] = 'On Progress';
+    //      } else {
+    //          $this->attributes['status'] = 'Done';
+    //      }
+    //  }
 
 
 }
