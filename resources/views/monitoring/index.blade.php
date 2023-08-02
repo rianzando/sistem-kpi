@@ -23,8 +23,8 @@
                             <a href="{{ route('monitoring.create') }}" class="btn btn-sm btn-success"><i
                                     class="fa fa-plus-circle"> Add</i></a>
                             <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
+                                <table class="table table-bordered table-hover table-responsive-sm">
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th>No</th>
                                             <th>Start Date</th>

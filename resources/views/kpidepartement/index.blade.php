@@ -75,8 +75,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table class="table table-hover mb-0">
-                                    <thead>
+                                <table class="table table-bordered table-hover table-responsive-sm">
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Departement</th>

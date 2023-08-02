@@ -75,8 +75,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table class="table table-striped table-responsive-sm">
-                                    <thead>
+                                <table class="table table-bordered table-hover table-responsive-sm">
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
