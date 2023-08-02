@@ -22,8 +22,8 @@
                 </ul>
             </li>
             <li class="nav-label">Kpi Setting</li>
-            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                        class="icon icon-app-store"></i><span class="nav-text">KPI</span></a>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"> <i
+                        class="fas fa-chart-line"></i><span class="nav-text">KPI</span></a>
                 <ul aria-expanded="false">
                     <li><a href="{{ route('corporates.index') }}">Corporate</a></li>
                     <li><a href="{{ route('kpidirectorate.index') }}">Directorate</a></li>

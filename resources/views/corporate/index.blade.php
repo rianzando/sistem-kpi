@@ -83,8 +83,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table class="table table-striped table-responsive-sm">
-                                    <thead>
+                                <table class="table table-bordered table-hover table-responsive-sm">
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Goals</th>
@@ -93,8 +93,8 @@
                                             <th>Bobot</th>
                                             <th>Achivement</th>
                                             <th>Status</th>
-                                            <th>Created by</th>
-                                            <th>Updated by</th>
+                                            <th>Created</th>
+                                            <th>Updated</th>
                                             <th style="width: 15%"></th>
                                         </tr>
                                     </thead>

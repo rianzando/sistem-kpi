@@ -12,7 +12,7 @@ class KpiCorporate extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'coporate',
+        'corporate',
         'goals',
         'kpi_corporate',
         'target_corporate',
