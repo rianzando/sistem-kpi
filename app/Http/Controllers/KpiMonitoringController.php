@@ -12,11 +12,11 @@ class KpiMonitoringController extends Controller
      */
     public function index()
     {
-        $kpiCorporates = KpiCorporate::query()
+        $kpicorporates = KpiCorporate::query()
         ->latest()
         ->paginate('20');
 
-    return view('kpimonitoring.index', compact('kpiCorporates'));
+    return view('kpimonitoring.index', compact('kpicorporates'));
     }
 
     /**

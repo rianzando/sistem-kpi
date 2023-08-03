@@ -16,7 +16,7 @@
             </div>
 
             <div id="accordion">
-                @foreach ($kpiCorporates as $kpicorporate)
+                @foreach ($kpicorporates as $kpicorporate)
                     <div class="card">
                         <div class="card-header" id="heading{{ $kpicorporate->id }}">
                             <h5 class="mb-0">
@@ -31,37 +31,66 @@
                         <div id="collapse{{ $kpicorporate->id }}" class="collapse show"
                             aria-labelledby="heading{{ $kpicorporate->id }}" data-parent="#accordion">
                             <div class="card-body">
-                                <table class="table table-responsive text-dark">
-                                    <thead>
-                                        <tr>
-                                            <th>Goals</th>
-                                            <th>KPI</th>
-                                            <th>Target</th>
-                                            <th>Ach</th>
-                                            <th>Directorate</th>
-                                            <th>KPI</th>
-                                            <th>Target</th>
-                                            <th>Ach</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ $kpicorporate->goals }}</td>
-                                            <td>{{ $kpicorporate->kpi_corporate }}</td>
-                                            <td>{{ $kpicorporate->target_corporate }}</td>
-                                            <td>{{ $kpicorporate->achievement }}</td>
-                                        </tr>
-                                        @foreach ($kpicorporate->kpidirectorates as $kpidirectorate)
+                                <p>Monitoring KPI PT MPK</p>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-responsive text-dark">
+                                        <thead>
                                             <tr>
-                                                <td colspan="4"></td>
-                                                <td>{{ $kpidirectorate->directorate->name }}</td>
-                                                <td>{{ $kpidirectorate->kpi_directorate }}</td>
-                                                <td>{{ $kpidirectorate->target }}</td>
-                                                <td>{{ $kpidirectorate->achievement }}</td>
+                                                <th>Goals</th>
+                                                <th>KPI</th>
+                                                <th>Target</th>
+                                                <th>Ach</th>
+                                                <th>Directorate</th>
+                                                <th>KPI</th>
+                                                <th>Target</th>
+                                                <th>Ach</th>
+                                                <th>Departement</th>
+                                                <th>Framework</th>
+                                                <th>KPI</th>
+                                                <th>Target</th>
+                                                <th>Ach</th>
+
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($kpicorporate->kpidirectorates as $index => $kpidirectorate)
+                                                <tr>
+                                                    @if ($index === 0)
+                                                        <td
+                                                            rowspan="{{ count($kpicorporate->kpidirectorates) + count($kpidirectorate->kpidepartement) + 1 }}">
+                                                            {{ $kpicorporate->goals }}</td>
+                                                        <td
+                                                            rowspan="{{ count($kpicorporate->kpidirectorates) + count($kpidirectorate->kpidepartement) + 1 }}">
+                                                            {{ $kpicorporate->kpi_corporate }}</td>
+                                                        <td
+                                                            rowspan="{{ count($kpicorporate->kpidirectorates) + count($kpidirectorate->kpidepartement) + 1 }}">
+                                                            {{ $kpicorporate->target_corporate }}</td>
+                                                        <td
+                                                            rowspan="{{ count($kpicorporate->kpidirectorates) + count($kpidirectorate->kpidepartement) + 1 }}">
+                                                            {{ $kpicorporate->achievement }}</td>
+                                                    @endif
+                                                    <td rowspan="{{ count($kpidirectorate->kpidepartement) + 1 }}">
+                                                        {{ $kpidirectorate->directorate->name }}</td>
+                                                    <td rowspan="{{ count($kpidirectorate->kpidepartement) + 1 }}">
+                                                        {{ $kpidirectorate->kpi_directorate }}</td>
+                                                    <td rowspan="{{ count($kpidirectorate->kpidepartement) + 1 }}">
+                                                        {{ $kpidirectorate->target }}</td>
+                                                    <td rowspan="{{ count($kpidirectorate->kpidepartement) + 1 }}">
+                                                        {{ $kpidirectorate->achievement }}</td>
+                                                </tr>
+                                                @foreach ($kpidirectorate->kpidepartement as $item)
+                                                    <tr>
+                                                        <td>{{ $item->departement->name }}</td>
+                                                        <td>{{ $item->framework }}</td>
+                                                        <td>{{ $item->kpi_departement }}</td>
+                                                        <td>{{ $item->target_departement }}</td>
+                                                        <td>{{ $item->achievement }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
