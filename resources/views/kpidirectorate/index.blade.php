@@ -75,7 +75,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table class="table table-bordered table-hover table-responsive-sm">
+                                <table class="table table-bordered table-hover table-responsive-sm text-dark">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
@@ -104,10 +104,8 @@
                                                         <span class="badge badge-primary">On progress</span>
                                                     @elseif ($kpidirectorate->status == 'Open')
                                                         <span class="badge badge-warning">Open</span>
-                                                    @elseif ($kpidirectorate->status == 'Done')
-                                                        <span class="badge badge-success">Done</span>
                                                     @else
-                                                        <span class="badge badge-secondary">Unknown</span>
+                                                        <span class="badge badge-success">Done</span>
                                                     @endif
                                                 </td>
                                                 <td>

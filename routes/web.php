@@ -7,6 +7,7 @@ use App\Http\Controllers\DirectorateController;
 use App\Http\Controllers\KpiCorporateController;
 use App\Http\Controllers\KpiDepartementController;
 use App\Http\Controllers\KpiDirectorateController;
+use App\Http\Controllers\KpiMonitoringController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/kpidepartement', KpiDepartementController::class);
     Route::resource('monitoring', MonitoringController::class);
     Route::get('/monitoring/create/{kpi_departement_id}', [MonitoringController::class, 'create'])->name('monitoring.create');
+    Route::resource('/kpimonitoring', KpiMonitoringController::class);
 
     Route::get('/dashboard/kpidepartement/chart-data', [DashboardController::class, 'getKpiDepartementChartData']);
     Route::get('/dashboard/kpidepartementstatus/chart-data', [DashboardController::class, 'getKpiDepartementstatusChartData']);

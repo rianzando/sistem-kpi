@@ -30,6 +30,13 @@
                     <li><a href="{{ route('kpidepartement.index') }}">Departement</a></li>
                 </ul>
             </li>
+            <li class="nav-label">Monitoring</li>
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"> <i class="fa fa-area-chart"
+                        aria-hidden="true"></i><span class="nav-text">Monitoring</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('kpimonitoring.index') }}">Monitoring</a></li>
+                </ul>
+            </li>
             <li class="nav-label">User</li>
             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="fas fa-cog"></i></i><span
                         class="nav-text">SETTING USER</span></a>

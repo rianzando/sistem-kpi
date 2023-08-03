@@ -46,11 +46,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="current_progress">Current Progress</label>
-                                    <input type="text" name="current_progress" class="form-control" required>
+                                    <textarea name="current_progress" class="form-control" cols="6" required></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="follow_up">Follow Up</label>
-                                    <input type="text" name="follow_up" class="form-control" required>
+                                    <textarea name="follow_up" class="form-control" cols="6" required></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="achievement">Achievement</label>
@@ -58,9 +58,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Status</label>
-                                    <input type="text" name="status" class="form-control" required>
+                                    <select class="form-control" name="status" id="status">
+                                        <option value="Open">Open</option>
+                                        <option value="Poseponed">Poseponed</option>
+                                        <option value="On Progress">On Progress</option>
+                                        <option value="Done">Done</option>
+                                    </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                <a href="{{ route('kpidepartement.index') }}" class="btn btn-danger">Cancel</a>
                             </form>
                         </div>
                     </div>

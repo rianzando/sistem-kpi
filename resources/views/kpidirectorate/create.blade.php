@@ -30,7 +30,7 @@
                             </div>
                         @endif
                         <div class="card-body">
-                            {{ $errors }}
+                            {{-- {{ $errors }} --}}
                             <div class="basic-form">
                                 <form action="{{ route('kpidirectorate.store') }}" method="POST">
                                     @csrf
@@ -103,7 +103,7 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Create</button>
-                                    <a href="{{ route('kpidepartement.index') }}" class="btn btn-danger">Cancel</a>
+                                    <a href="{{ route('kpidirectorate.index') }}" class="btn btn-danger">Cancel</a>
                                 </form>
 
                             </div>
