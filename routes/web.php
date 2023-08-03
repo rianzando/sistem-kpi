@@ -49,10 +49,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/monitoring/create/{kpi_departement_id}', [MonitoringController::class, 'create'])->name('monitoring.create');
     Route::resource('/kpimonitoring', KpiMonitoringController::class);
 
-    Route::get('/dashboard/kpidepartement/chart-data', [DashboardController::class, 'getKpiDepartementChartData']);
-    Route::get('/dashboard/kpidepartementstatus/chart-data', [DashboardController::class, 'getKpiDepartementstatusChartData']);
-    Route::get('/dashboard/kpidirectorate/chart-data', [DashboardController::class, 'getKpiDirectorateChartData']);
-    Route::get('/dashboard/kpidirectoratestatus/chart-data', [DashboardController::class, 'getKpiDirectorateStatusChartData']);
+    // Route::get('/dashboard/kpidepartement/chart-data', [DashboardController::class, 'getKpiDepartementChartData']);
+    // Route::get('/dashboard/kpidepartementstatus/chart-data', [DashboardController::class, 'getKpiDepartementstatusChartData']);
+    // Route::get('/dashboard/kpidirectorate/chart-data', [DashboardController::class, 'getKpiDirectorateChartData']);
+    // Route::get('/dashboard/kpidirectoratestatus/chart-data', [DashboardController::class, 'getKpiDirectorateStatusChartData']);
+    Route::get('/api/kpi-data/{departmentId}', [DashboardController::class, 'getKpiDepartementChartDataApi']);
+    Route::get('/api/kpi-status-data/{departmentId}', [DashboardController::class, 'getKpiDepartementstatusChartDataApi']);
 
 });
 

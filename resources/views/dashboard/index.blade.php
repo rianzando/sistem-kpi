@@ -123,59 +123,15 @@
                             <option value="{{ $departement->id }}">{{ $departement->name }}</option>
                         @endforeach
                     </select>
+                    <button onclick="filterByDepartment()">Filter</button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div id="container"></div>
+                    <div id="kpiChartContainer"></div>
                 </div>
                 <div class="col-md-6">
-                    <div id="container3"></div>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div id="container2"></div>
-                </div>
-                <div class="col-md-6">
-                    <div id="container4"></div>
-                    {{-- <div class="card">
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h5 class="pb-3">5 Last Data Achivement Departement</h5>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-responsive-sm" height="300">
-                                    <thead>
-                                        <tr>
-                                            <th>Departement</th>
-                                            <th>KPI Departement</th>
-                                            <th>Achievement</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    @foreach ($kpidepartements as $kpidepartement)
-                                        <tbody>
-                                            <tr>
-                                                <td>{{ $kpidepartement->departement->name }}</td>
-                                                <td>{{ $kpidepartement->kpi_departement }}</td>
-                                                <td>{{ $kpidepartement->achievement }}</td>
-                                                <td>
-                                                    @if ($kpidepartement->status == 'Open')
-                                                        <span class="badge badge-warning">Open</span>
-                                                    @elseif ($kpidepartement->status == 'On Progress')
-                                                        <span class="badge badge-primary">On Progress</span>
-                                                    @else
-                                                        <span class="badge badge-success">Done</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    @endforeach
-                                </table>
-                            </div>
-                        </div>
-                    </div> --}}
+                    <div id="statusChartContainer"></div>
                 </div>
             </div>
         </div>
@@ -189,80 +145,83 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
     <script>
-        // Function to fetch chart data via AJAX with a department filter
-        async function getChartDataWithFilter(endpoint, department) {
-            const url = department === 'all' ?
-                endpoint :
-                `${endpoint}?department=${encodeURIComponent(department)}`;
-            const response = await fetch(url);
-            return response.json();
-        }
-
-        // Function to generate random colors
-        function getRandomColor() {
-            return '#' + Math.floor(Math.random() * 16777215).toString(16);
-        }
-
-        // Global variables to store Highcharts objects
-        let achievementChart;
+        let chart;
         let statusChart;
 
-        // Function to create and update the achievement chart
-        async function createAchievementChart(selectedDepartment) {
-            const endpoint = 'http://127.0.0.1:8000/dashboard/kpidepartement/chart-data';
-            const data = await getChartDataWithFilter(endpoint, selectedDepartment);
-            console.log("Selected Department:", selectedDepartment);
+        function fetchChartData(departmentId) {
+            fetch(`/api/kpi-data/${departmentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateChart(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching KPI data:', error);
+                });
+        }
 
-            console.log("Achievement Chart Data:", data); // Add this line to check the data
+        function fetchStatusChartData(departmentId) {
+            fetch(`/api/kpi-status-data/${departmentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateStatusChart(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching status data:', error);
+                });
+        }
 
-            // Generate random colors for each data point in the series
-            const colors = data.achievement.map(() => getRandomColor());
+        // Function to generate random colors for the series
+        function generateRandomColors(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                colors.push(color);
+            }
+            return colors;
+        }
 
-            // Destroy the existing chart if it exists
-            if (achievementChart) {
-                achievementChart.destroy();
+        // Function to update the average achievement chart with new data
+        function updateChart(data) {
+            if (chart) {
+                chart.destroy();
             }
 
-            achievementChart = Highcharts.chart('container', {
+            const seriesColors = generateRandomColors(data.department_names.length);
+
+            chart = Highcharts.chart('kpiChartContainer', {
                 chart: {
-                    type: 'bar',
-                    options3d: {
-                        enabled: true,
-                        alpha: 15,
-                        beta: 15,
-                        depth: 50,
-                        viewDistance: 25
-                    }
+                    type: 'bar'
                 },
                 title: {
-                    text: 'KPI Departement Achievement',
+                    text: 'Average Achievement Department'
                 },
                 xAxis: {
-                    categories: data.department_names,
+                    categories: data.department_names
                 },
                 yAxis: {
                     title: {
-                        text: 'Achievement',
-                    },
-                    min: 0,
-                    max: 100,
+                        text: 'Average Achievement'
+                    }
                 },
                 plotOptions: {
-                    cylinder: {
+                    bar: {
+                        colors: seriesColors,
                         dataLabels: {
                             enabled: true,
-                            format: '{y}%',
-                        },
-                        colorByPoint: true,
+                            format: '{y}', // Show the achievement value on top of each bar
+                            style: {
+                                fontSize: '12px',
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }
+                        } // Assign random colors to the series
                     }
                 },
                 series: [{
-                    name: 'Achievement',
-                    data: data.achievement.map((value, index) => ({
-                        y: value,
-                        color: colors[index],
-                    })),
+                    name: 'Average Achievement',
+                    data: data.achievement
                 }],
                 exporting: {
                     buttons: {
@@ -274,42 +233,47 @@
             });
         }
 
-        // Function to create and update the status chart
-        async function createStatusChart(selectedDepartment) {
-            const endpoint = '/dashboard/kpidepartementstatus/chart-data';
-            const data = await getChartDataWithFilter(endpoint, selectedDepartment);
-            console.log("Status Chart Data:", data); // Add this line to check the data
+        // Function to update the status chart with new data
+        function updateStatusChart(data) {
+            if (!data || !data.department_names || !Array.isArray(data.status_counts)) {
+                console.error('Invalid status data received:', data);
+                return;
+            }
 
-            // Destroy the existing chart if it exists
             if (statusChart) {
                 statusChart.destroy();
             }
 
-            statusChart = Highcharts.chart('container3', {
+            statusChart = Highcharts.chart('statusChartContainer', {
                 chart: {
-                    type: 'column',
+                    type: 'column'
                 },
                 title: {
-                    text: 'KPI Departement Status',
+                    text: 'Status Counts for Each Department'
                 },
                 xAxis: {
-                    categories: data.department_names,
+                    categories: data.department_names
                 },
                 yAxis: {
                     title: {
-                        text: 'Status Count',
+                        text: 'Count'
                     },
+                    min: 0 // Set the minimum value of the y-axis to 0
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
                 },
                 series: [{
                     name: 'Open',
-                    data: data.status_counts.map(counts => counts['Open']),
-                    color: '#BBE83B',
+                    data: data.status_counts.map(item => item['Open'] || 0)
                 }, {
                     name: 'On Progress',
-                    data: data.status_counts.map(counts => counts['On Progress']),
+                    data: data.status_counts.map(item => item['On Progress'] || 0)
                 }, {
                     name: 'Done',
-                    data: data.status_counts.map(counts => counts['Done']),
+                    data: data.status_counts.map(item => item['Done'] || 0)
                 }],
                 exporting: {
                     buttons: {
@@ -321,128 +285,15 @@
             });
         }
 
-        // Event listener for the department dropdown change
-        document.getElementById('departmentDropdown').addEventListener('change', () => {
-            const selectedDepartment = document.getElementById('departmentDropdown').value;
-            createAchievementChart(selectedDepartment);
-            createStatusChart(selectedDepartment);
-        });
-
-        // Call the initial chart creation functions to load the charts with "All Departments" data
-        createAchievementChart('all');
-        createStatusChart('all');
-    </script>
-
-
-
-
-
-
-    {{-- grafik directorate  --}}
-    <script>
-        // Function to fetch chart data via AJAX
-        function getChartData() {
-            return fetch('http://127.0.0.1:8000/dashboard/kpidirectorate/chart-data')
-                .then(response => response.json());
+        // Function to handle filtering based on the selected department
+        function filterByDepartment() {
+            const selectedDepartmentId = document.getElementById("departmentDropdown").value;
+            fetchChartData(selectedDepartmentId);
+            fetchStatusChartData(selectedDepartmentId);
         }
 
-        // Function to create and update the chart
-        async function createChart() {
-            const data = await getChartData();
-
-            Highcharts.chart('container2', {
-                chart: {
-                    type: 'bar',
-                    options3d: {
-                        enabled: true,
-                        alpha: 15,
-                        beta: 15,
-                        depth: 50,
-                        viewDistance: 25
-                    } // Change this to the desired chart type (e.g., line, bar, pie, etc.)
-                },
-                title: {
-                    text: 'KPI Directorate Achievement',
-                },
-                xAxis: {
-                    categories: data.directorate_names,
-                },
-                yAxis: {
-                    title: {
-                        text: 'Achievement',
-                    },
-                    min: 0,
-                    max: 100,
-                },
-                series: [{
-                    name: 'Achievement',
-                    data: data.achievement,
-                    color: '#BBE83B',
-                }],
-                // Add exporting options for drilldown
-                exporting: {
-                    buttons: {
-                        contextButton: {
-                            menuItems: ['downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG'],
-                        },
-                    },
-                },
-            });
-        }
-
-        // Call the createChart function to create the chart
-        createChart();
-    </script>
-    <!-- Script to fetch chart data via AJAX -->
-    <script>
-        function getStatusChartData() {
-            return fetch('http://127.0.0.1:8000/dashboard/kpidirectoratestatus/chart-data')
-                .then(response => response.json());
-        }
-
-        // Function to create and update the status chart
-        async function createStatusChart() {
-            const data = await getStatusChartData();
-
-            Highcharts.chart('container4', {
-                chart: {
-                    type: 'column', // Change the chart type to 'column'
-                },
-                title: {
-                    text: 'KPI Directorate Status',
-                },
-                xAxis: {
-                    categories: data.directorate_names,
-                },
-                yAxis: {
-                    title: {
-                        text: 'Status Count',
-                    },
-                },
-                series: [{
-                    name: 'Open',
-                    data: data.status_counts.map(counts => counts['Open']),
-                    color: '#FF0000', // You can customize the color for each status if needed
-                }, {
-                    name: 'On Progress',
-                    data: data.status_counts.map(counts => counts['On Progress']),
-                    color: '#00FF00',
-                }, {
-                    name: 'Done',
-                    data: data.status_counts.map(counts => counts['Done']),
-                    color: '#0000FF',
-                }],
-                exporting: {
-                    buttons: {
-                        contextButton: {
-                            menuItems: ['downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG'],
-                        },
-                    },
-                },
-            });
-        }
-
-        // Call the createStatusChart function to create the status chart
-        createStatusChart();
+        // Initially, load the charts with all departments data
+        fetchChartData('all');
+        fetchStatusChartData('all');
     </script>
 @endsection
