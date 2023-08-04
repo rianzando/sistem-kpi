@@ -33,7 +33,13 @@
                             <div class="card-body">
                                 <p>Monitoring KPI PT MPK</p>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-responsive text-dark">
+                                    <div class="card-title">
+                                        <button class="btn btn-primary" onclick="exportToPDF()">Export to
+                                            PDF</button>
+                                        <button class="btn btn-primary" onclick="exportToExcel()">Export to
+                                            Excel</button>
+                                    </div>
+                                    <table class="table table-bordered table-responsive text-dark" id="kpiTable">
                                         <thead>
                                             <tr>
                                                 <th>Goals</th>
@@ -99,5 +105,20 @@
         </div>
         {{ $kpicorporates->links() }}
     </div>
+    <script>
+        // Function to export the table data to PDF
+        function exportToPDF() {
+            const element = document.querySelector('#kpiTable');
+            html2pdf()
+                .from(element)
+                .save('kpimonitoring.pdf');
+        }
 
+        // Function to export the table data to Excel
+        function exportToExcel() {
+            const table = document.querySelector('#kpiTable');
+            const workbook = XLSX.utils.table_to_book(table);
+            XLSX.writeFile(workbook, 'kpimonitoring.xlsx');
+        }
+    </script>
 @endsection

@@ -17,6 +17,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <script src="https://kit.fontawesome.com/9886a60e0e.js" crossorigin="anonymous"></script>
 
+    <!-- Add these links to your head section or wherever appropriate -->
+    <script src="path/to/jspdf.min.js"></script>
+    <script src="path/to/xlsx.full.min.js"></script>
+
+    <!-- Add these links to your head section or wherever appropriate -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+
+
 
 </head>
 
