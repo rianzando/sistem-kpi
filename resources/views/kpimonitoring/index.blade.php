@@ -23,7 +23,7 @@
                                 <button class="btn btn-link" data-toggle="collapse"
                                     data-target="#collapse{{ $kpicorporate->id }}" aria-expanded="true"
                                     aria-controls="collapse{{ $kpicorporate->id }}">
-                                    {{ $kpicorporate->goals }}
+                                    {{ $kpicorporate->goals }} -> {{ $kpicorporate->target_corporate }}
                                 </button>
                             </h5>
                         </div>
@@ -97,6 +97,7 @@
                 @endforeach
             </div>
         </div>
+        {{ $kpicorporates->links() }}
     </div>
 
 @endsection
