@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             DirectorateSeeder::class,
             DepartementSeeder::class,
             KpiCorporateSeeder::class,
+            KpiDepartementSeeder::class,
         ]);
     }
 }
