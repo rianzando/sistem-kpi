@@ -19,7 +19,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">Monitoring KPI PT MPK</h5>
                     <div class="card-title">
-                        <button class="btn btn-primary" onclick="exportToPDF()">Export to PDF</button>
+                        {{-- <button class="btn btn-primary" onclick="exportToPDF()">Export to PDF</button> --}}
                         <button class="btn btn-primary float-end" onclick="exportToExcel()">Export to Excel</button>
                     </div>
                 </div>
@@ -41,6 +41,10 @@
                                     <th>KPI</th>
                                     <th>Target</th>
                                     <th>Ach</th>
+                                    <th>start Date</th>
+                                    <th>End Date</th>
+                                    <th>Current Progress</th>
+                                    <th>Follow up</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,11 +70,26 @@
                                                     <td rowspan="{{ count($kpidirectorate->kpidepartement) }}">
                                                         {{ $kpidirectorate->achievement }}</td>
                                                 @endif
-                                                <td>{{ $item->departement->name }}</td>
-                                                <td>{{ $item->framework }}</td>
-                                                <td>{{ $item->kpi_departement }}</td>
-                                                <td>{{ $item->target_departement }}</td>
-                                                <td>{{ $item->achievement }}</td>
+                                                <td class="text-nowrap">{{ $item->departement->name }}</td>
+                                                <td class="text-nowrap">{{ $item->framework }}</td>
+                                                <td class="text-nowrap">{{ $item->kpi_departement }}</td>
+                                                <td class="text-nowrap">{{ $item->target_departement }}</td>
+                                                <td class="text-nowrap">{{ $item->achievement }}</td>
+                                                @if ($item->monitorings->isNotEmpty())
+                                                    @foreach ($item->monitorings as $monitoring)
+                                                        @if ($loop->index === 0)
+                                                            <td class="text-nowrap">{{ $monitoring->start_date }}</td>
+                                                            <td class="text-nowrap">{{ $monitoring->end_date }}</td>
+                                                            <td class="text-nowrap">{{ $monitoring->current_progress }}
+                                                            </td>
+                                                            <td class="text-nowrap">{{ $monitoring->follow_up }}</td>
+                                                        @else
+                                                            <td colspan="4"></td>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    <td colspan="4">No monitoring data available</td>
+                                                @endif
                                             </tr>
                                         @endforeach
                                         @if ($kpidirectorate->kpidepartement->isEmpty())
@@ -83,7 +102,7 @@
                                                 <td rowspan="1">{{ $kpidirectorate->kpi_directorate }}</td>
                                                 <td rowspan="1">{{ $kpidirectorate->target }}</td>
                                                 <td rowspan="1">{{ $kpidirectorate->achievement }}</td>
-                                                <td colspan="5">No data available</td>
+                                                <td colspan="9">No data available</td>
                                             </tr>
                                         @endif
                                     @endforeach
@@ -93,7 +112,7 @@
                                             <td rowspan="1">{{ $kpicorporate->kpi_corporate }}</td>
                                             <td rowspan="1">{{ $kpicorporate->target_corporate }}</td>
                                             <td rowspan="1">{{ $kpicorporate->achievement }}</td>
-                                            <td colspan="7">No data available</td>
+                                            <td colspan="11">No data available</td>
                                         </tr>
                                     @endif
                                 @endforeach
@@ -107,12 +126,12 @@
     </div>
     <script>
         // Function to export the table data to PDF
-        function exportToPDF() {
-            const element = document.querySelector('#kpiTable');
-            html2pdf()
-                .from(element)
-                .save('kpimonitoring.pdf');
-        }
+        // function exportToPDF() {
+        //     const element = document.querySelector('#kpiTable');
+        //     html2pdf()
+        //         .from(element)
+        //         .save('kpimonitoring.pdf');
+        // }
 
         // Function to export the table data to Excel
         function exportToExcel() {
