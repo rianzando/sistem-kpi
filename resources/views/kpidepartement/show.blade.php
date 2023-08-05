@@ -82,6 +82,43 @@
                     </div>
                 </div>
             </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-responsive-sm text-dark">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Current Progress</th>
+                            <th>Follow Up</th>
+                            <th>Achievement</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($kpidepartement->monitorings as $monitoring)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $monitoring->start_date }}</td>
+                                <td>{{ $monitoring->end_date }}</td>
+                                <td>{{ $monitoring->current_progress }}</td>
+                                <td>{{ $monitoring->follow_up }}</td>
+                                <td>{{ $monitoring->achievement }}</td>
+                                <td>
+                                    @if ($monitoring->status == 'On Progress')
+                                        <span class="badge badge-primary">On progress</span>
+                                    @elseif ($monitoring->status == 'Open')
+                                        <span class="badge badge-warning">Open</span>
+                                    @else
+                                        <span class="badge badge-success">Done</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 @endsection
