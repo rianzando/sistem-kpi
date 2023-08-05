@@ -19,8 +19,8 @@ class Departement extends Model
         return $this->belongsTo(Directorate::class)->withDefault();
     }
 
-    public function user()
+    public function users()
     {
-        return $this->hasMany(UserDetail::class);
+        return $this->belongsToMany(User::class, 'user_departements');
     }
 }

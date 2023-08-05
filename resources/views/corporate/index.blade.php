@@ -44,7 +44,7 @@
                                     </ul>
                                 </div>
                             @endif
-                            <form action="{{ route('corporates.index') }}" method="GET">
+                            {{-- <form action="{{ route('corporates.index') }}" method="GET">
                                 <div class="input-group mb-3">
                                     <input type="text" name="keyword" class="form-control"
                                         placeholder="Search by target kpi corporate" value="{{ $keyword }}">
@@ -52,13 +52,39 @@
                                         <button class="btn btn-outline-secondary" type="submit">Search</button>
                                     </div>
                                 </div>
-                            </form>
+                            </form> --}}
                             <div class="table-responsive">
                                 <a href="{{ route('corporates.create') }}" class="btn btn-outline-success"><i
-                                        class="fa fa-plus-circle"> Add
-                                        KPI</i></a>
-                                <table class="table table-striped table-responsive-sm">
-                                    <thead>
+                                        class="fa fa-plus-circle"></i></a>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <form action="{{ route('corporates.index') }}" method="GET">
+                                            <label for="perPage">Show:</label>
+                                            <select name="perPage" id="perPage" onchange="this.form.submit()">
+                                                @foreach ($entries as $entry)
+                                                    <option value="{{ $entry }}"
+                                                        {{ $perPage == $entry ? 'selected' : '' }}>
+                                                        {{ $entry }}</option>
+                                                @endforeach
+                                            </select>
+                                        </form>
+                                        <div class="card-tools">
+                                            <form action="{{ route('corporates.index') }}" method="GET">
+                                                <div class="input-group input-group-sm" style="width: 150px;">
+                                                    <input type="text" name="search" value="{{ $search }}"
+                                                        class="form-control float-right" placeholder="Search">
+                                                    <div class="input-group-append">
+                                                        <button type="submit" class="btn btn-default">
+                                                            <i class="fas fa-search"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-bordered table-hover table-responsive-sm text-dark">
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Goals</th>
@@ -67,7 +93,8 @@
                                             <th>Bobot</th>
                                             <th>Achivement</th>
                                             <th>Status</th>
-                                            <th>Created by</th>
+                                            <th>Created</th>
+                                            <th>Updated</th>
                                             <th style="width: 15%"></th>
                                         </tr>
                                     </thead>
@@ -81,6 +108,7 @@
                                                 <td>{{ $corporates->bobot }}</td>
                                                 <td>{{ $corporates->achievement }}</td>
                                                 <td>{{ $corporates->status }}</td>
+                                                <td>{{ $corporates->user->name }}</td>
                                                 <td>{{ $corporates->user->name }}</td>
                                                 <td>
                                                     <a href="{{ route('corporates.edit', $corporates->id) }}"
@@ -118,7 +146,7 @@
                                         </tfoot>
                                     @endforelse
                                 </table>
-                                {{ $kpiCorporates->appends(['keyword' => $keyword])->links() }}
+                                {{ $kpiCorporates->appends(['keyword' => $search])->links() }}
                             </div>
                         </div>
                     </div>

@@ -17,6 +17,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <script src="https://kit.fontawesome.com/9886a60e0e.js" crossorigin="anonymous"></script>
 
+    <!-- Add these links to your head section or wherever appropriate -->
+    <script src="path/to/jspdf.min.js"></script>
+    <script src="path/to/xlsx.full.min.js"></script>
+
+    <!-- Add these links to your head section or wherever appropriate -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+
+
 
 </head>
 
@@ -89,12 +99,6 @@
                                     <i class="mdi mdi-account"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    @auth
-                                        <a href="{{ route('users.profile', auth()->user()->id) }}"
-                                            class="dropdown-item">View Profile</a>
-                                    @else
-                                        <a href="{{ route('login') }}" class="dropdown-item">Login</a>
-                                    @endauth
                                     <a href="{{ route('users.profile', auth()->user()->id) }}" class="dropdown-item">
                                         <i class="icon-user"></i>
                                         <span class="ml-2">Profile </span>
@@ -191,7 +195,7 @@
     <script src="{{ asset('back/vendor/jquery.counterup/jquery.counterup.min.js') }}"></script>
 
 
-    <script src="{{ asset('back/js/dashboard/dashboard-1.js') }}"></script>
+
 
     {{-- sweetalert  --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
@@ -203,6 +207,7 @@
         })
     </script>
 
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.2/chart.min.js"></script> --}}
 </body>
 
 </html>

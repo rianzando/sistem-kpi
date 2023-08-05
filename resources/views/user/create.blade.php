@@ -55,20 +55,13 @@
                             <div class="card-header">
                                 <h4 class="card-title">Add New User</h4>
                                 <a href="{{ route('users.index') }}" class="btn btn-sm btn-default float-right">Back</a>
-                                @if (session()->has('success'))
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        {{ session('success') }} <i class="fas fa-check-circle"></i><button type="button"
-                                            class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                @endif
-                                @if (session()->has('error'))
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        {{ session('error') }}
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 @endif
                             </div>
@@ -137,16 +130,29 @@
                                                 <input id="phone" type="number"
                                                     class="form-control input-border-bottom" name="phone" required>
                                             </div>
-                                            {{-- departement  --}}
+                                            {{-- directorates  --}}
                                             <div class="form-group form-floating-label">
-                                                <label for="departement_id">Select Departement</label>
-                                                <select class="form-control input-border-bottom" name="departement_id"
-                                                    id="departement_id" required>
-                                                    @foreach ($departements as $departement)
-                                                        <option value="{{ $departement->id }}">{{ $departement->name }}
+                                                <label for="directorate_id">Select Directorates</label>
+                                                <select class="form-control input-border-bottom" name="directorate_id"
+                                                    id="directorate_id" required>
+                                                    @foreach ($directorates as $directorate)
+                                                        <option value="{{ $directorate->id }}">{{ $directorate->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                            {{-- departement  --}}
+                                            <div class="form-group">
+                                                <label for="departement_id">Departments</label><br>
+                                                @foreach ($departements as $departement)
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="departement_id[]" value="{{ $departement->id }}"
+                                                            id="departement{{ $departement->id }}">
+                                                        <label class="form-check-label"
+                                                            for="departement{{ $departement->id }}">{{ $departement->name }}</label>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                             {{-- position --}}
                                             <div class="form-group form-floating-label">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KpiCorporate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KpiCorporateController extends Controller
 {
@@ -13,22 +14,20 @@ class KpiCorporateController extends Controller
     public function index(Request $request)
     {
         try {
-            // Get the search keyword from the query parameter 'q'
-            $keyword = $request->query('q');
-
-            // Get the number of items per page from the query parameter 'per_page'
-            $perPage = $request->query('per_page', 10);
+            $perPage = $request->query('perPage', 5); // Mengambil nilai perPage dari query parameter, default 5
+            $search = $request->query('search'); // Mengambil nilai search dari query parameter
 
             // Query the KpiCorporate model based on the search keyword
             $query = KpiCorporate::query();
-            if ($keyword) {
-                $query->where('kpi_corporate', 'LIKE', '%' . $keyword . '%');
+            if ($search) {
+                $query->where('kpi_corporate', 'LIKE', '%' . $search . '%');
             }
 
             // Fetch the KPI corporates with pagination
             $kpiCorporates = $query->paginate($perPage);
+            $entries = [5, 10, 25, 50]; // Pilihan jumlah data entries per halaman
 
-            return view('corporate.index', compact('kpiCorporates', 'keyword', 'perPage'));
+            return view('corporate.index', compact('kpiCorporates',  'perPage', 'entries', 'search'));
         } catch (\Throwable $th) {
             return redirect()->route('home')->with('error', 'An error occurred while fetching KPI corporates.');
         }
@@ -54,7 +53,7 @@ class KpiCorporateController extends Controller
             'target_corporate' => 'nullable|string',
             'bobot' => 'required|numeric',
             'year' => 'required|integer|between:1900,' . (date('Y') + 50),
-            'achievement' => 'required|numeric',
+
         ]);
 
         // Simpan data ke database
@@ -65,27 +64,13 @@ class KpiCorporateController extends Controller
         $corporate->target_corporate = $request->input('target_corporate');
         $corporate->bobot = $request->input('bobot');
         $corporate->year = $request->input('year');
-        $corporate->achievement = $request->input('achievement');
-        $corporate->status = $this->calculateStatus($request->input('achievement'));
         $corporate->save();
 
         // Redirect ke halaman yang diinginkan (misalnya halaman index)
         return redirect()->route('corporates.index')->with('success', 'Corporate data has been saved successfully.');
     }
 
-    // Fungsi untuk menghitung nilai status berdasarkan achievement
-    private function calculateStatus($achievement)
-    {
-        if ($achievement < 40) {
-            return 'Open';
-        } elseif ($achievement < 100) {
-            return 'On Progress';
-        } else {
-            return 'Done';
-        }
-    }
-
-    /**
+     /**
      * Display the specified resource.
      */
     public function show($id)
@@ -123,7 +108,7 @@ class KpiCorporateController extends Controller
             'target_corporate' => 'nullable|string',
             'bobot' => 'required|numeric',
             'year' => 'required|integer|between:1900,' . (date('Y') + 50),
-            'achievement' => 'required|numeric',
+
         ]);
 
         // Cari data KpiCorporate berdasarkan ID
@@ -135,8 +120,7 @@ class KpiCorporateController extends Controller
         $corporate->target_corporate = $request->input('target_corporate');
         $corporate->bobot = $request->input('bobot');
         $corporate->year = $request->input('year');
-        $corporate->achievement = $request->input('achievement');
-        $corporate->status = $this->calculateStatus($request->input('achievement'));
+        $corporate->updated = Auth::id();
         $corporate->save();
 
         // Redirect ke halaman yang diinginkan (misalnya halaman index)

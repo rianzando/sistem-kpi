@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Departement;
+use App\Models\Directorate;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserDetail;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -22,20 +23,20 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-    $keyword = $request->input('keyword'); // Mendapatkan kata kunci pencarian dari request
+    $search = $request->input('search'); // Mendapatkan kata kunci pencarian dari request
     $perPage = $request->input('perpage', 10); // Mendapatkan jumlah item per halaman dari request (default: 10)
 
-    $query = User::with('role', 'userdetail');
+    $query = User::query();
 
     // Jika ada kata kunci pencarian, tambahkan kondisi pencarian ke query
-    if (!empty($keyword)) {
-        $query->where('name', 'LIKE', '%' . $keyword . '%')
-              ->orWhere('email', 'LIKE', '%' . $keyword . '%');
+    if ($search) {
+        $query->where('name', 'LIKE', '%' . $search . '%');
     }
 
     $users = $query->paginate($perPage);
+    $entries = [5, 10, 25, 50]; // Pilihan jumlah data entries per halaman
 
-    return view('user.index', compact('users', 'keyword', 'perPage'));
+    return view('user.index', compact('users', 'search', 'perPage','entries'));
     }
 
     /**
@@ -45,10 +46,11 @@ class UserController extends Controller
     {
         // Ambil data roles dan departements untuk ditampilkan di form
         $roles = Role::all();
+        $directorates = Directorate::all();
         $departements = Departement::all();
         $userDetail = UserDetail::all();
 
-        return view('user.create', compact('roles', 'departements', 'userDetail'));
+        return view('user.create', compact('roles','directorates', 'departements', 'userDetail'));
     }
 
     /**
@@ -57,16 +59,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validasi input dari form
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
                 'role_id' => 'required|exists:roles,id',
-                'departement_id' => 'required|exists:departements,id',
+                'departement_id' => 'required|array', // Use array validation rule
+                'departement_id.*' => 'exists:departements,id', // Validate each element in the array
                 'image' => 'nullable|image|mimes:png,jpg,jpeg|max:10048',
                 // Add more validation rules for other fields in the form
             ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
             // Simpan data pengguna baru ke dalam tabel users
             $user = new User();
@@ -74,16 +80,14 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->role_id = $request->role_id;
-
             $user->save();
-            // dd($request->all());
 
             // Simpan data user_detail baru ke dalam tabel user_details
             $userDetail = new UserDetail();
             $userDetail->user_id = $user->id;
             $userDetail->nik = $request->nik;
             $userDetail->domisili = $request->domisili;
-            $userDetail->departement_id = $request->departement_id;
+            $userDetail->directorate_id = $request->directorate_id;
             $userDetail->address = $request->address;
             $userDetail->phone = $request->phone;
             $userDetail->position = $request->position;
@@ -106,23 +110,20 @@ class UserController extends Controller
 
             $userDetail->save();
 
+            // Associate the user with the selected departments (many-to-many relationship)
+            $user->departements()->attach($request->departement_id);
+
             // Redirect ke halaman index pengguna dengan pesan sukses
             return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan!');
-            // } catch (QueryException $e) {
-            //     dd($e->getMessage()); // Tampilkan pesan kesalahan query database
-            //     return redirect()->route('users.create')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
-            // } catch (\Exception $e) {
-            //     dd($e->getMessage()); // Tampilkan pesan kesalahan umum
-            //     return redirect()->route('users.create')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
-            // }
-        }  catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             // Tangkap exception jika ada masalah dengan query database
             return redirect()->back()->withInput()->withErrors(['error' => 'Gagal menyimpan data User. ' . $th->getMessage()]);
-        }  catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             // Tangkap exception umum jika ada kesalahan lainnya
             return redirect()->route('users.create')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
         }
     }
+
 
 
 
@@ -151,10 +152,11 @@ class UserController extends Controller
 
         // Fetch all roles and departements for dropdowns
         $roles = Role::all();
+        $directorates = Directorate::all();
         $departements = Departement::all();
 
         // Return the view with user data and dropdown options
-        return view('user.edit', compact('user', 'roles', 'departements'));
+        return view('user.edit', compact('user', 'roles', 'departements','directorates'));
     } catch (\Throwable $th) {
         // Handle database query exception
         return redirect()->route('users.index')->with('error', 'Failed to fetch user data. ' . $th->getMessage());
@@ -201,6 +203,7 @@ class UserController extends Controller
             $userDetail = UserDetail::where('user_id', $id)->firstOrFail();
             $userDetail->nik = $request->nik;
             $userDetail->domisili = $request->domisili;
+            $userDetail->directorate_id = $request->directorate_id;
             $userDetail->departement_id = $request->departement_id;
             $userDetail->address = $request->address;
             $userDetail->phone = $request->phone;
@@ -231,23 +234,23 @@ class UserController extends Controller
             $userDetail->save();
 
             // Redirect to the user profile page with success message
-            return redirect()->route('users.index')->with('success', 'User data has been updated successfully!');
-        } catch (\Throwable $th) {
-            // Handle database query exception
-            return redirect()->back()->withInput()->withErrors(['error' => 'Failed to update user data. ' . $th->getMessage()]);
-        } catch (\Exception $e) {
-            // Handle other general exceptions
-            return redirect()->route('users.index')->with('error', 'An error occurred. Please try again or contact the administrator.');
-        }
+        //     return redirect()->route('users.index')->with('success', 'User data has been updated successfully!');
+        // } catch (\Throwable $th) {
+        //     // Handle database query exception
+        //     return redirect()->back()->withInput()->withErrors(['error' => 'Failed to update user data. ' . $th->getMessage()]);
+        // } catch (\Exception $e) {
+        //     // Handle other general exceptions
+        //     return redirect()->route('users.index')->with('error', 'An error occurred. Please try again or contact the administrator.');
+        // }
 
-    //     return redirect()->route('users.index')->with('success', 'Pengguna berhasil diupdate!');
-    // } catch (QueryException $e) {
-    //         dd($e->getMessage()); // Tampilkan pesan kesalahan query database
-    //         return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
-    //     } catch (\Exception $e) {
-    //         dd($e->getMessage()); // Tampilkan pesan kesalahan umum
-    //         return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
-    //     }
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil diupdate!');
+    } catch (QueryException $e) {
+            dd($e->getMessage()); // Tampilkan pesan kesalahan query database
+            return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan dalam menyimpan data. Mohon coba lagi.');
+        } catch (\Exception $e) {
+            dd($e->getMessage()); // Tampilkan pesan kesalahan umum
+            return redirect()->route('users.edit')->with('error', 'Terjadi kesalahan. Mohon coba lagi atau hubungi administrator.');
+        }
     }
 
 

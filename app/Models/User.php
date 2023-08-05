@@ -67,6 +67,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(KpiCorporate::class);
     }
+
+    public function departements()
+    {
+        return $this->belongsToMany(Departement::class, 'user_departements');
+    }
     // public function roles()
     // {
     //     return $this->belongsToMany(Role::class, ReferenceHasRole::class, 'reference_id')->wherePivot('reference_type', FeatureEnum::USER);

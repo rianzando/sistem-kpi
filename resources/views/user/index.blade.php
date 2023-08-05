@@ -44,21 +44,39 @@
                                     </ul>
                                 </div>
                             @endif
-                            <form action="{{ route('users.index') }}" method="GET">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="keyword" class="form-control"
-                                        placeholder="Search by name or email" value="{{ $keyword }}">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="submit">Search</button>
-                                    </div>
-                                </div>
-                            </form>
                             <div class="table-responsive">
                                 <a href="{{ route('users.create') }}" class="btn btn-sm btn-success"><i
                                         class="fa fa-plus-circle"> Add
                                         User</i></a>
-                                <table class="table table-striped table-responsive-sm">
-                                    <thead>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <form action="{{ route('users.index') }}" method="GET">
+                                            <label for="perPage">Show:</label>
+                                            <select name="perPage" id="perPage" onchange="this.form.submit()">
+                                                @foreach ($entries as $entry)
+                                                    <option value="{{ $entry }}"
+                                                        {{ $perPage == $entry ? 'selected' : '' }}>
+                                                        {{ $entry }}</option>
+                                                @endforeach
+                                            </select>
+                                        </form>
+                                        <div class="card-tools">
+                                            <form action="{{ route('users.index') }}" method="GET">
+                                                <div class="input-group input-group-sm" style="width: 150px;">
+                                                    <input type="text" name="search" value="{{ $search }}"
+                                                        class="form-control float-right" placeholder="Search">
+                                                    <div class="input-group-append">
+                                                        <button type="submit" class="btn btn-default">
+                                                            <i class="fas fa-search"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-bordered table-hover table-responsive-sm text-dark">
+                                    <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
@@ -157,7 +175,7 @@
                                         </tfoot>
                                     @endforelse
                                 </table>
-                                {{ $users->appends(['keyword' => $keyword])->links() }}
+                                {{ $users->links() }}
                             </div>
                         </div>
                     </div>
