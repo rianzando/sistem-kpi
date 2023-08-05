@@ -65,6 +65,7 @@ class MonitoringController extends Controller
         $monitoring->current_progress = $request->current_progress;
         $monitoring->follow_up = $request->follow_up;
         $monitoring->achievement = $request->achievement;
+        $monitoring->status = $request->status;
         $monitoring->user_id = auth()->user()->id;
         $monitoring->save();
 
@@ -177,6 +178,7 @@ class MonitoringController extends Controller
         $monitoring->current_progress = $request->current_progress;
         $monitoring->follow_up = $request->follow_up;
         $monitoring->achievement = $request->achievement;
+        $monitoring->status = $request->status;
         $monitoring->user_id = auth()->user()->id;
         $monitoring->save();
 

@@ -35,6 +35,7 @@
                         aria-hidden="true"></i><span class="nav-text">Monitoring</span></a>
                 <ul aria-expanded="false">
                     <li><a href="{{ route('kpimonitoring.index') }}">Monitoring</a></li>
+                    <li><a href="{{ route('indexmonitoring') }}">Monitoring KPI</a></li>
                 </ul>
             </li>
             <li class="nav-label">User</li>

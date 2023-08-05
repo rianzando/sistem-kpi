@@ -1,17 +1,17 @@
 <!-- resources/views/kpi_departements/index.blade.php -->
 @extends('layouts.main')
-@section('title', 'KPI Departements')
+@section('title', 'KPI Departements Monitoring')
 @section('content')
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
-                    <h4 class="page-title">KPI Departements</h4>
+                    <h4 class="page-title">KPI Departements Monitoring</h4>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">KPI Departements</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">KPI</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">KPI Departements Monitoring</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">KPI Monitoring</a></li>
                     </ol>
                 </div>
             </div>
@@ -46,10 +46,10 @@
                                 </div>
                             @endif
                             <div class="table-responsive">
-                                <a href="{{ route('kpidepartement.create') }}" class="btn btn-outline-success"><i
-                                        class="fa fa-plus-circle"></i></a>
+                                {{-- <a href="{{ route('kpidepartement.create') }}" class="btn btn-outline-success"><i
+                                        class="fa fa-plus-circle"></i></a> --}}
                                 <div class="card">
-                                    <div class="card-header">
+                                    {{-- <div class="card-header">
                                         <form action="{{ route('kpidepartement.index') }}" method="GET">
                                             <label for="perPage">Show:</label>
                                             <select name="perPage" id="perPage" onchange="this.form.submit()">
@@ -73,7 +73,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <table class="table table-bordered table-hover table-responsive-sm text-dark">
                                     <thead class="thead-dark">
@@ -86,11 +86,16 @@
                                             <th>Year</th>
                                             <th>Achievement</th>
                                             <th>Status</th>
-                                            <th style="width: 15%">Action</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Current Progress</th>
+                                            <th>Follow up</th>
+                                            <th>Achievement</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($kpiDepartements as $kpiDepartement)
+                                        @foreach ($kpidepartements as $kpiDepartement)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $kpiDepartement->departement->name }}</td>
@@ -108,69 +113,43 @@
                                                         <span class="badge badge-success">Done</span>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    <a href="{{ route('monitoring.create', $kpiDepartement->id) }}"
-                                                        class="btn btn-sm btn-success" data-toggle="tooltip"
-                                                        data-placement="top" title="Add Monitoring"><i
-                                                            class="fa fa-plus"></i></a>
-                                                    <a href="{{ route('kpidepartement.show', $kpiDepartement->id) }}"
-                                                        class="btn btn-sm btn-primary" data-toggle="tooltip"
-                                                        data-placement="top" title="Show"><i class="fa fa-eye"></i></a>
-                                                    <a href="{{ route('kpidepartement.edit', $kpiDepartement->id) }}"
-                                                        class="btn btn-sm btn-warning" data-toggle="tooltip"
-                                                        data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                                    <form class="d-inline" method="post"
-                                                        action="{{ route('kpidepartement.destroy', $kpiDepartement->id) }}"
-                                                        data-user="{{ $kpiDepartement->id }}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-sm btn-danger delete-btn"
-                                                            data-toggle="tooltip" data-placement="top" title="Delete">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
+                                                @if ($kpiDepartement->monitorings->isEmpty())
+                                                    <td colspan="6">No monitoring data available</td>
+                                                @else
+                                                    <td>{{ \Carbon\Carbon::parse($kpiDepartement->monitorings[0]->start_date)->format('Y-m-d') }}
+                                                    </td>
+                                                    <td>{{ \Carbon\Carbon::parse($kpiDepartement->monitorings[0]->end_date)->format('Y-m-d') }}
+                                                    </td>
+                                                    <td>{{ $kpiDepartement->monitorings[0]->current_progress }}</td>
+                                                    <td>{{ $kpiDepartement->monitorings[0]->follow_up }}</td>
+                                                    <td>{{ $kpiDepartement->monitorings[0]->achievement }}</td>
+                                                    <td>{{ $kpiDepartement->monitorings[0]->status }}</td>
+                                                @endif
                                             </tr>
+                                            @if ($kpiDepartement->monitorings->count() > 1)
+                                                @for ($i = 1; $i < $kpiDepartement->monitorings->count(); $i++)
+                                                    <tr>
+                                                        <td colspan="8"></td>
+                                                        <td>{{ \Carbon\Carbon::parse($kpiDepartement->monitorings[0]->start_date)->format('Y-m-d') }}
+                                                        </td>
+                                                        <td>{{ \Carbon\Carbon::parse($kpiDepartement->monitorings[0]->end_date)->format('Y-m-d') }}
+                                                        </td>
+                                                        <td>{{ $kpiDepartement->monitorings[$i]->current_progress }}</td>
+                                                        <td>{{ $kpiDepartement->monitorings[$i]->follow_up }}</td>
+                                                        <td>{{ $kpiDepartement->monitorings[$i]->achievement }}</td>
+                                                        <td>{{ $kpiDepartement->monitorings[$i]->status }}</td>
+                                                    </tr>
+                                                @endfor
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                            {{ $kpidepartements->links() }}
                         </div>
-                        {{ $kpiDepartements->links() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        // Function to show the SweetAlert confirmation dialog
-        function showDeleteConfirmation(form) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You are about to delete this KPI Departement data. This action cannot be undone!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If the user clicks 'Yes', submit the form
-                    form.submit();
-                }
-            });
-        }
-
-        // Add an event listener to the delete buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.delete-btn');
-            deleteButtons.forEach((button) => {
-                button.addEventListener('click', function() {
-                    const form = this.closest('form');
-                    showDeleteConfirmation(form);
-                });
-            });
-        });
-    </script>
 @endsection

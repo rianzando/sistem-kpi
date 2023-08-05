@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('current_progress')->nullable();
             $table->text('follow_up')->nullable();
             $table->integer('achievement')->default(0);
-            $table->string('status')->default('Open');
+            $table->string('status');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('updated')->nullable();
             $table->timestamps();
