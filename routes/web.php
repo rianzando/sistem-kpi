@@ -23,12 +23,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['guest'])->group(function () {
-    Route::get('/', function () {
-        return view('auth.login');
-    });
+Route::get('/', function () {
+    return view('auth.login');
 });
-
 
 Route::middleware(['auth'])->group(function () {
 
@@ -88,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'authenticating'])->name('login')->middleware('guest');
+Route::post('login', [AuthController::class, 'authenticating'])->name('login');
 Route::get('register', [AuthController::class, 'register'])->name('registeruser');
 Route::post('register', [AuthController::class, 'registeruser'])->name('registeruser');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
