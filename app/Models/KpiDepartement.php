@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
-class kpiDepartement extends Model
+class KpiDepartement extends Model
 {
     use HasFactory,SoftDeletes;
 
