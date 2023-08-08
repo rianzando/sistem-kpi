@@ -52,7 +52,7 @@ class KpiDirectorate extends Model
      */
     public function kpidepartement(): HasMany
     {
-        return $this->hasMany(kpiDepartement::class,'kpi_directorate_id');
+        return $this->hasMany(KpiDepartement::class,'kpi_directorate_id');
     }
 
 

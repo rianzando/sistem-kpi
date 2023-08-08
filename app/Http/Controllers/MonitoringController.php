@@ -70,7 +70,7 @@ class MonitoringController extends Controller
         $monitoring->save();
 
         // Get the corresponding kpi_departement and update its achievement field with the latest monitoring achievement
-        $kpiDepartement = kpiDepartement::findOrFail($request->kpi_departement_id);
+        $kpiDepartement = KpiDepartement::findOrFail($request->kpi_departement_id);
         $latestAchievement = $kpiDepartement->monitorings()->latest()->value('achievement');
         $kpiDepartement->achievement = $latestAchievement;
 
@@ -183,7 +183,7 @@ class MonitoringController extends Controller
         $monitoring->save();
 
         // Get the corresponding kpi_departement and update its achievement field with the latest monitoring achievement
-        $kpiDepartement = kpiDepartement::findOrFail($request->kpi_departement_id);
+        $kpiDepartement = KpiDepartement::findOrFail($request->kpi_departement_id);
         $latestAchievement = $kpiDepartement->monitorings()->latest()->value('achievement');
         $kpiDepartement->achievement = $latestAchievement;
 

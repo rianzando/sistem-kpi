@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Departement;
-use App\Models\kpiDepartement;
+use App\Models\KpiDepartement;
 use App\Models\KpiDirectorate;
 use App\Models\Monitoring;
 use Illuminate\Http\Request;
@@ -142,7 +142,7 @@ class KpiDepartementController extends Controller
             'year' => 'required|numeric',
         ]);
 
-        $kpidepartement = kpiDepartement::findOrFail($id);
+        $kpidepartement = KpiDepartement::findOrFail($id);
         // Prepare the data for update
 
            $kpidepartement->user_id = auth()->user()->id;
@@ -176,7 +176,7 @@ class KpiDepartementController extends Controller
     {
     try {
         // Cari pengguna berdasarkan $id
-        $kpidepartement = kpiDepartement::findOrFail($id);
+        $kpidepartement = KpiDepartement::findOrFail($id);
 
         // Hapus data pengguna
         $kpidepartement->delete();

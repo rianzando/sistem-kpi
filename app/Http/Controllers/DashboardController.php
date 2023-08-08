@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Departement;
 use App\Models\Directorate;
 use App\Models\KpiCorporate;
-use App\Models\kpiDepartement;
+use App\Models\KpiDepartement;
 use App\Models\KpiDirectorate;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -203,7 +203,7 @@ class DashboardController extends Controller
 
     // Loop through each department and calculate the average achievement
     foreach ($departments as $department) {
-        $averageAchievement = kpiDepartement::where('departement_id', $department->id)->avg('achievement');
+        $averageAchievement = KpiDepartement::where('departement_id', $department->id)->avg('achievement');
         // Round the average achievement to 2 decimal places (you can adjust this as needed)
         $averageAchievement = round($averageAchievement, 2);
 
@@ -224,7 +224,7 @@ class DashboardController extends Controller
 public function getKpiDepartementstatusChartDataApi()
 {
     // Get all KPI Departements with their respective department names and statuses
-    $kpis = kpiDepartement::with('departement')->get();
+    $kpis = KpiDepartement::with('departement')->get();
 
     // Initialize an associative array to store status counts for each department
     $statusCountsByDepartment = [];
