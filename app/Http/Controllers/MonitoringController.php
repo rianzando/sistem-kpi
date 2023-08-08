@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KpiCorporate;
-use App\Models\kpiDepartement;
+use App\Models\KpiDepartement;
 use App\Models\KpiDirectorate;
 use App\Models\Monitoring;
 use Illuminate\Http\Request;

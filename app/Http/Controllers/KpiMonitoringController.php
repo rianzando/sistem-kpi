@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KpiCorporate;
-use App\Models\kpiDepartement;
+use App\Models\KpiDepartement;
 use Illuminate\Http\Request;
 
 class KpiMonitoringController extends Controller
@@ -23,7 +23,7 @@ class KpiMonitoringController extends Controller
 
     function indexmonitoring()
     {
-        $kpidepartements = kpiDepartement::query()
+        $kpidepartements = KpiDepartement::query()
         ->latest()
         ->paginate();
 
